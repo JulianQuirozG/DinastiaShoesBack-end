@@ -1,13 +1,19 @@
-const express = require('express')
-const morgan = require('morgan')
-const app= express()
+const express = require('express');
+const morgan = require('morgan');
+const app= express();
 const port = process.env.PORT || 3000;
-const comerceRouter = require('./routes/productos')
+const productoRouter = require('./routes/productos');
+const usuarioRouter = require('./routes/usuarios');
+const clienteRouter = require('./routes/cliente');
+const empleadoRouter = require('./routes/empleado');
 
 app.use(morgan('dev'))
 app.use(express.json())
 
-app.use('/api',comerceRouter)
+app.use('/productos',productoRouter);
+app.use('/usuario',usuarioRouter);
+app.use('/cliente',clienteRouter);
+app.use('/empleado',empleadoRouter);
 
 
 app.listen(port, ()=>{

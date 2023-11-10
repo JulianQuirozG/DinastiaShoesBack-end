@@ -1,10 +1,10 @@
 const Producto = require('../models/productoModel'); // Importa el modelo de usuario
 
 //LISTAR PRODUCTOS
-async function obtenerProductos(req,res){
+async function obtenerProductos(req, res) {
   try {
     const producto = await Producto.findAll({
-     // attributes: { exclude: ['createdAt', 'updatedAt'] }
+      // attributes: { exclude: ['createdAt', 'updatedAt'] }
     });
     res.json(producto);
   } catch (error) {
@@ -14,10 +14,10 @@ async function obtenerProductos(req,res){
 }
 
 //OBTENER UN PRODUCTO POR EL ID
-async function obtenerUnProducto(req,res){
-  const {codigo} =req.params;
+async function obtenerUnProducto(req, res) {
+  const { codigo } = req.params;
   try {
-    const producto = await Producto.findByPk(codigo,{
+    const producto = await Producto.findByPk(codigo, {
       //attributes: { exclude: ['createdAt', 'updatedAt'] }
     });
     res.json(producto);
@@ -52,7 +52,7 @@ async function crearProducto(req, res) {
 //ELIMINAR UN PRODUCTO
 async function eliminarProductoPorId(req, res) {
   const { codigo } = req.params;
-  await console.log("codigo: ",codigo);
+  await console.log("codigo: ", codigo);
   try {
     const producto = await Producto.findByPk(codigo);
     console.log(producto);
@@ -72,7 +72,7 @@ async function eliminarProductoPorId(req, res) {
 //actualizar por id
 async function actualizarProductoPorId(req, res) {
   const { codigo } = req.params;
-  const { nombre, descripcion, destacado, categoria_id  } = req.body;
+  const { nombre, descripcion, destacado, categoria_id } = req.body;
 
   try {
     const producto = await Producto.findByPk(codigo);
@@ -96,9 +96,9 @@ async function actualizarProductoPorId(req, res) {
 }
 
 module.exports = {
-    obtenerProductos,
-    obtenerUnProducto,
-    crearProducto,
-    eliminarProductoPorId,
-    actualizarProductoPorId
-  };
+  obtenerProductos,
+  obtenerUnProducto,
+  crearProducto,
+  eliminarProductoPorId,
+  actualizarProductoPorId
+};

@@ -6,10 +6,10 @@ const productController = require('../controllers/productoControllers');
 const app= express()
 
 // Definir rutas
-router.get('/productos', productController.obtenerProductos);
-router.get('/productos/:codigo', productController.obtenerUnProducto);
-router.put('/productos/', productController.crearProducto);
-router.delete('/productos/:codigo', productController.eliminarProductoPorId);
-router.patch('/productos/:codigo', productController.actualizarProductoPorId);
+router.get('/listar', productController.obtenerProductos);
+router.get('/obtener/:codigo', productController.obtenerUnProducto);
+router.put('/crear/', productController.crearProducto);
+router.delete('/eliminar/:codigo', productController.eliminarProductoPorId);
+router.patch('/actualizar/:codigo', productController.actualizarProductoPorId);
 
 module.exports = router;
