@@ -12,7 +12,7 @@ const sequelize  = new Sequelize(
     }
   );
 
-//  console.log("Procesando manos",sequelize);
+// console.log("Procesando manos",sequelize);
 // Verifica la conexión a la base de datos
 (async () => {
   try {

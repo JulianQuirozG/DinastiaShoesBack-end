@@ -1,6 +1,7 @@
 const Usuario = require('../models/usuarioModel'); // Importa el modelo de usuario
 const Cliente = require('../models/clienteModel'); // Importa el modelo de usuario
 const Empleado = require('../models/empleadoModel'); // Importa el modelo de usuario
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -230,19 +231,21 @@ async function login(req, res) {
 
             if (passwordsMatch) {
                 // Validar la contraseña
-                const contra = 'DinastiaShoes2023';
+                //const contra = '../config/private_key.pem';
+                //const privateKey = fs.readFileSync(contra, 'utf-8')
+                //console.log(privateKey);
+                
                 const payload = {
                     cedula: user.cedula,
+                    nombres: user.nombres,
                     tipo: user.tipo
                 };
 
 
-                const token = jwt.sign(payload, contra, {
-                    algorithm: "RS256",
-                    expireIn: '1h'
-                });
+                const token = jwt.sign(payload, 'DinastiaShoes2023',{ expiresIn: '1h'});
 
-                res.json(passwordsMatch);
+                //res.json(passwordsMatch);
+                res.status(200).send({ token });
                 
             } else {
                 res.status(401).json({ error: 'La clave es incorrecta' });
