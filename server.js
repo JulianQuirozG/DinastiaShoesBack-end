@@ -6,6 +6,8 @@ const productoRouter = require('./routes/productos');
 const usuarioRouter = require('./routes/usuarios');
 const clienteRouter = require('./routes/cliente');
 const empleadoRouter = require('./routes/empleado');
+const fotosRouter = require('./routes/fotos');
+const categoriaRouter = require('./routes/categoria');
 
 app.use(morgan('dev'))
 app.use(express.json())
@@ -14,6 +16,8 @@ app.use('/productos',productoRouter);
 app.use('/usuario',usuarioRouter);
 app.use('/cliente',clienteRouter);
 app.use('/empleado',empleadoRouter);
+app.use('/categoria',categoriaRouter);
+app.use('/fotos',fotosRouter);
 
 
 app.listen(port, ()=>{
