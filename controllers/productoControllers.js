@@ -13,9 +13,7 @@ async function obtenerProductos(req, res) {
       ]
     });
 
-
     res.json(producto);
-
 
   } catch (error) {
     console.error('Error al obtener productos:', error);
@@ -27,9 +25,15 @@ async function obtenerProductos(req, res) {
 async function obtenerUnProducto(req, res) {
   const { codigo } = req.params;
   try {
-    const producto = await Producto.findByPk(codigo, {
-      //attributes: { exclude: ['createdAt', 'updatedAt'] }
+    const producto = await Producto.findByPk(codigo, { 
+      include: [
+        {
+          model: Foto,
+          attributes: ['codigo','url_foto','producto_codigo'],
+        }
+      ]
     });
+    
     res.json(producto);
   } catch (error) {
     console.error('Error al obtener productos:', error);

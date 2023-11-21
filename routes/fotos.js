@@ -9,6 +9,7 @@ const app = express()
 // Rutas para Clientes
 router.post('/subirImagen/:producto', upload.array('image', 5), fotoController.uploadToFirebaseAndSaveLink);
 router.get('/listar', fotoController.obtenerLinkImagenes);
-router.get('/listar/:producto', fotoController.obtenerLinkImagenesById)
+router.get('/listar/:producto', fotoController.obtenerLinkImagenesById);
+router.delete('/eliminar/:id', fotoController.eliminarImagenes);
 
 module.exports = router;

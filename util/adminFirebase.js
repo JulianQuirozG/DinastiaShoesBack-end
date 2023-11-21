@@ -1,4 +1,4 @@
-const { ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
+const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require('firebase/storage');
 const { storage } = require('../config/firebaseConfig.js');
 const sharp = require('sharp');
 
@@ -32,7 +32,22 @@ const uploadFile = async (file) => {
 
 }
 
+const deleteFile = (url) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const fileRef = ref(storage, url);
+            await deleteObject(fileRef);
+            console.log('Eliminado exitosamente');
+            resolve({ respuesta: true });
+        } catch (error) {
+            console.error('Error al eliminar la imagen:', error);
+            reject({ respuesta: false, error });
+        }
+    });
+};
+
 module.exports = {
-    uploadFile
+    uploadFile,
+    deleteFile
 };
 

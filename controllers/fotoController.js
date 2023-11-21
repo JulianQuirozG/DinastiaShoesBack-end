@@ -1,5 +1,5 @@
 const Foto = require('../models/fotoModel'); // Asegúrate de tener el modelo Foto configurado correctamente
-const { uploadFile } = require('../util/adminFirebase');
+const { uploadFile, deleteFile } = require('../util/adminFirebase');
 
 const uploadToFirebaseAndSaveLink = async (req, res) => {
 
@@ -55,13 +55,37 @@ async function obtenerLinkImagenesById(req, res) {
     try {
         const { producto } = req.params;
         const foto = await Foto.findAll({
-            where:{
+            where: {
                 producto_codigo: producto
-            }});
+            }
+        });
         res.json(foto);
     } catch (error) {
         console.error('Error al obtener informacion las imagenes:', error);
         res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+    }
+}
+
+async function eliminarImagenes(req, res) {
+    try {
+        const { id } = req.params;
+        const foto = await Foto.findByPk(id);
+
+        if (foto) {
+            const { respuesta, error } = await deleteFile(foto.url_foto);
+
+            if (respuesta) {
+                await foto.destroy(); // Elimina el producto de la base de datos
+                res.json({ mensaje: 'Imagen eliminada exitosamente' });
+            } else {
+                res.status(500).json({ error: 'Error al eliminar la imagen', detalle: error });
+            }
+        } else {
+            res.status(404).json({ error: 'Imagen no encontrada' });
+        }
+    } catch (error) {
+        console.error('Error al eliminar la imagen:', error);
+        res.status(500).json({ error: 'Error al eliminar la imagen' });
     }
 }
 
@@ -70,6 +94,7 @@ async function obtenerLinkImagenesById(req, res) {
 module.exports = {
     uploadToFirebaseAndSaveLink,
     obtenerLinkImagenes,
-    obtenerLinkImagenesById
+    obtenerLinkImagenesById,
+    eliminarImagenes
 
 };
