@@ -21,7 +21,7 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
                     });
 
                     return { foto };
-                } 
+                }
 
             });
 
@@ -41,7 +41,35 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
 
 };
 
+async function obtenerLinkImagenes(req, res) {
+    try {
+        const foto = await Foto.findAll();
+        res.json(foto);
+    } catch (error) {
+        console.error('Error al obtener informacion las imagenes:', error);
+        res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+    }
+}
+
+async function obtenerLinkImagenesById(req, res) {
+    try {
+        const { producto } = req.params;
+        const foto = await Foto.findAll({
+            where:{
+                producto_codigo: producto
+            }});
+        res.json(foto);
+    } catch (error) {
+        console.error('Error al obtener informacion las imagenes:', error);
+        res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+    }
+}
+
+
 
 module.exports = {
     uploadToFirebaseAndSaveLink,
+    obtenerLinkImagenes,
+    obtenerLinkImagenesById
+
 };

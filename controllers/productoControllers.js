@@ -1,12 +1,22 @@
 const Producto = require('../models/productoModel'); // Importa el modelo de usuario
+const Foto = require('../models/fotoModel');
 
 //LISTAR PRODUCTOS
 async function obtenerProductos(req, res) {
   try {
-    const producto = await Producto.findAll({
-      // attributes: { exclude: ['createdAt', 'updatedAt'] }
+    const producto = await Producto.findAll({ 
+      include: [
+        {
+          model: Foto,
+          attributes: ['codigo','url_foto','producto_codigo'],
+        }
+      ]
     });
+
+
     res.json(producto);
+
+
   } catch (error) {
     console.error('Error al obtener productos:', error);
     res.status(500).json({ error: 'Error al obtener productos' });
