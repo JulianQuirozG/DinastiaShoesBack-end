@@ -1,45 +1,48 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
 const Foto = require('./fotoModel');
-const Inventario = require('./inventarioModel');
+const Producto = require('./productoModel');
 
-const Producto = sequelize.define('producto', {
+const Inventario = sequelize.define('inventario', {
   codigo: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
   },
-  nombre: {
+  cantidad: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  talla: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  descripcion: {
+  color: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  destacado: {
-    type: DataTypes.CHAR,
+  precio: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
-  categoria_id: {
+  descuento: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  producto_codigo: {
     type: DataTypes.INTEGER,
     allowNull: false,
   }
-},{
-  tableName:'producto',
+}, {
+  tableName: 'inventario',
   timestamps: false,
 }
 );
 
-// Sincroniza el modelo con la base de datos
-
-Producto.hasMany(Inventario, { foreignKey: 'producto_codigo' });
-
-
-Producto.hasMany(Inventario, { foreignKey: 'producto_codigo' });
 Inventario.hasMany(Foto, { foreignKey: 'inventario_codigo' });
 
-Producto.sync();
 
-module.exports = Producto;
+Inventario.sync();
+
+module.exports = Inventario;

@@ -3,9 +3,10 @@ const sequelize = require('../config/database'); // Importa la conexión a la ba
 
 const Categoria = sequelize.define('categoria', {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
+      autoIncrement: true,
     },
     nombre: {
       type: DataTypes.STRING,

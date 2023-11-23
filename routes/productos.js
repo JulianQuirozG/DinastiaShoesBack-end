@@ -11,5 +11,6 @@ router.get('/obtener/:codigo', productController.obtenerUnProducto);
 router.put('/crear/', productController.crearProducto);
 router.delete('/eliminar/:codigo', productController.eliminarProductoPorId);
 router.patch('/actualizar/:codigo', productController.actualizarProductoPorId);
+router.get('/filtrar',productController.obtenerProductoFiltrado)
 
 module.exports = router;

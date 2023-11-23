@@ -17,7 +17,7 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
 
                     const foto = await Foto.create({
                         url_foto: downloadURL,
-                        producto_codigo: producto
+                        inventario_codigo: producto
                     });
 
                     return { foto };
@@ -56,7 +56,7 @@ async function obtenerLinkImagenesById(req, res) {
         const { producto } = req.params;
         const foto = await Foto.findAll({
             where: {
-                producto_codigo: producto
+                inventario_codigo: producto
             }
         });
         res.json(foto);

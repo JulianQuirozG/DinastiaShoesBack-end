@@ -1,15 +1,21 @@
 const Producto = require('../models/productoModel'); // Importa el modelo de usuario
+const Inventario = require('../models/inventarioModel');
 const Foto = require('../models/fotoModel');
 
 //LISTAR PRODUCTOS
 async function obtenerProductos(req, res) {
   try {
-    const producto = await Producto.findAll({ 
+    const producto = await Producto.findAll({
       include: [
         {
-          model: Foto,
-          attributes: ['codigo','url_foto','producto_codigo'],
-        }
+          model: Inventario,
+          include: [
+            {
+              model: Foto
+            }
+          ]
+        },
+
       ]
     });
 
@@ -25,15 +31,19 @@ async function obtenerProductos(req, res) {
 async function obtenerUnProducto(req, res) {
   const { codigo } = req.params;
   try {
-    const producto = await Producto.findByPk(codigo, { 
+    const producto = await Producto.findByPk(codigo, {
       include: [
         {
-          model: Foto,
-          attributes: ['codigo','url_foto','producto_codigo'],
-        }
+          model: Inventario,
+          include: [
+            {
+              model: Foto
+            }
+          ]
+        },
       ]
     });
-    
+
     res.json(producto);
   } catch (error) {
     console.error('Error al obtener productos:', error);
@@ -109,10 +119,38 @@ async function actualizarProductoPorId(req, res) {
   }
 }
 
+async function obtenerProductoFiltrado(req, res) {
+  const { categoria } = req.body;
+  try {
+    const catego = await Producto.findAll({
+      where: {
+        destacado: categoria,
+      },
+      include: [
+        {
+          model: Inventario,
+          include: [
+            {
+              model: Foto
+            }
+          ]
+        },
+
+      ]
+
+    });
+    res.json(catego);
+  } catch (error) {
+    console.error('Error al obtener Producto filtrada:', error);
+    res.status(500).json({ error: 'Error al obtener Producto filtrada' });
+  }
+}
+
 module.exports = {
   obtenerProductos,
   obtenerUnProducto,
   crearProducto,
   eliminarProductoPorId,
-  actualizarProductoPorId
+  actualizarProductoPorId,
+  obtenerProductoFiltrado
 };

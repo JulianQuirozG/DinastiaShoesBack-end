@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
-const Producto = require('./productoModel');
 
 const Foto = sequelize.define('foto', {
     codigo: {
@@ -13,8 +12,8 @@ const Foto = sequelize.define('foto', {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    producto_codigo: {
-      type: DataTypes.STRING,
+    inventario_codigo: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     }
   },{

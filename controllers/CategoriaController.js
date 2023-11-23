@@ -31,13 +31,12 @@ async function obtenerUnaCategoria(req, res) {
 
 //CREAR UN PRODUCTO
 async function crearCategoria(req, res) {
-    const { id, nombre, destacado } = req.body;
+    const { nombre, destacado } = req.body;
 
     try {
 
-        if (id && nombre && destacado) {
+        if (nombre && destacado) {
             const nuevaCatego = await Categoria.create({
-                id,
                 nombre,
                 destacado,
             });
@@ -98,6 +97,21 @@ async function actualizarCategoriaPorId(req, res) {
     }
 }
 
+async function obtenerCategoriaFiltrada(req, res) {
+    const { categoria } = req.body;
+    try {
+        const catego = await Categoria.findAll({
+            where: {
+                destacado: categoria,
+            }
+        });
+        res.json(catego);
+    } catch (error) {
+        console.error('Error al obtener Categoria filtrada:', error);
+        res.status(500).json({ error: 'Error al obtener Categoria filtrada' });
+    }
+}
+
 
 module.exports = {
     obtenerCategoria,
@@ -105,4 +119,5 @@ module.exports = {
     crearCategoria,
     eliminarCategoriaPorId,
     actualizarCategoriaPorId,
+    obtenerCategoriaFiltrada,
 };
