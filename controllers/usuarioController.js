@@ -234,7 +234,7 @@ async function login(req, res) {
                 //const contra = '../config/private_key.pem';
                 //const privateKey = fs.readFileSync(contra, 'utf-8')
                 //console.log(privateKey);
-                
+
                 const payload = {
                     cedula: user.cedula,
                     nombres: user.nombres,
@@ -242,11 +242,11 @@ async function login(req, res) {
                 };
 
 
-                const token = jwt.sign(payload, 'DinastiaShoes2023',{ expiresIn: '1h'});
+                const token = jwt.sign(payload, 'DinastiaShoes2023', { expiresIn: '1h' });
 
                 //res.json(passwordsMatch);
-                res.status(200).send({ token });
-                
+                res.status(200).send({ token: token, usuario: user });
+
             } else {
                 res.status(401).json({ error: 'La clave es incorrecta' });
             }
