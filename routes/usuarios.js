@@ -11,7 +11,7 @@ router.get('/listar', usuarioController.obtenerUsuario);
 router.get('/listarFiltrado/:filtro', usuarioController.obtenerUsuarioFiltrado);
 router.get('/obtener/:cedula', usuarioController.obtenerUnUsuario);
 
-router.get('/login', usuarioController.login);
+router.post('/login', usuarioController.login);
 router.put('/crearAdmin/', usuarioController.crearUsuarioAdmin);
 router.put('/crearEmpleado/', usuarioController.crearUsuarioEmpleado);
 router.put('/crearCliente/', usuarioController.crearUsuarioCliente);

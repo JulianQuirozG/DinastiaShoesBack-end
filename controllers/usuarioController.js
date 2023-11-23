@@ -1,7 +1,6 @@
 const Usuario = require('../models/usuarioModel'); // Importa el modelo de usuario
 const Cliente = require('../models/clienteModel'); // Importa el modelo de usuario
 const Empleado = require('../models/empleadoModel'); // Importa el modelo de usuario
-const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
