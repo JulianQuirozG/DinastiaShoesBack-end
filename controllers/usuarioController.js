@@ -196,7 +196,6 @@ async function actualizarUsuarioPorId(req, res) {
                 user.nombres = nombres;
                 user.apellidos = apellidos;
                 user.correo = correo;
-                user.contrasenia = contrasenia;
                 user.sexo = sexo;
                 user.fecha_nacimiento = fecha_nacimiento;
 
