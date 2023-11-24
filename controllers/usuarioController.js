@@ -190,20 +190,15 @@ async function actualizarUsuarioPorId(req, res) {
         const user = await Usuario.findByPk(cedula);
 
         if (user) {
-            const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
-            if (regex.test(contrasenia)) {
-                // Actualiza los datos del cliente
-                user.nombres = nombres;
-                user.apellidos = apellidos;
-                user.correo = correo;
-                user.sexo = sexo;
-                user.fecha_nacimiento = fecha_nacimiento;
+            // Actualiza los datos del cliente
+            user.nombres = nombres;
+            user.apellidos = apellidos;
+            user.correo = correo;
+            user.sexo = sexo;
+            user.fecha_nacimiento = fecha_nacimiento;
 
-                await user.save(); // Guarda los cambios en la base de datos
-                res.json(user);
-            } else {
-                res.status(404).json({ error: 'La clave no cumple con los parametros necesarios' });
-            }
+            await user.save(); // Guarda los cambios en la base de datos
+            res.json(user);
 
         } else {
             res.status(404).json({ error: 'usuario no encontrado' });
