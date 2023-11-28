@@ -3,6 +3,8 @@ const Cliente = require('../models/clienteModel'); // Importa el modelo de usuar
 const Empleado = require('../models/empleadoModel'); // Importa el modelo de usuario
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { transporter } = require('../config/nodemailer');
+require('dotenv').config();
 
 //Listar Usuarios
 async function obtenerUsuario(req, res) {
@@ -223,10 +225,6 @@ async function login(req, res) {
             const passwordsMatch = await bcrypt.compare(password, user.contrasenia);
 
             if (passwordsMatch) {
-                // Validar la contraseña
-                //const contra = '../config/private_key.pem';
-                //const privateKey = fs.readFileSync(contra, 'utf-8')
-                //console.log(privateKey);
 
                 const payload = {
                     cedula: user.cedula,
@@ -254,6 +252,109 @@ async function login(req, res) {
 }
 
 
+async function enviarCorreoContrasenia(req, res) {
+    try {
+        const { destinatario } = req.params;
+
+        const token = jwt.sign({ destinatario }, process.env.JWT_PASS, { expiresIn: '15m' });
+
+        const asunto = 'Recuperar contraseña DinastiaShoes';
+        const cuerpo = `Haz click en el siguiente link para poder reestablecer tu contraseña: localhost:3000/recovery/reset/${token}`;
+
+        const mailOptions = {
+            from: 'dinastiashoesoficial@hotmail.com',
+            to: destinatario,
+            subject: asunto,
+            text: cuerpo,
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+
+        console.log('Correo enviado:', info.response);
+        res.status(200).json({ mensaje: 'Correo enviado exitosamente' });
+    } catch (error) {
+        console.error('Error al enviar el correo:', error);
+        res.status(500).json({ error: 'Error al enviar el correo' });
+    }
+}
+
+
+
+async function olvidarContraUsuario(req, res) {
+    const { usuario, contrasen, } = req.body;
+    try {
+        // Crea un nuevo usuario en la base de datos
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
+        if (regex.test(contrasen)) {
+
+            const saltRounds = 10;
+            // Genera el hash de la contraseña
+            const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
+            const user = await Usuario.findOne({
+                where: {
+                    correo: usuario,
+                },
+            });
+
+            if (user) {
+                // Actualiza los datos del cliente
+                user.contrasenia = hashedPassword;
+
+                await user.save(); // Guarda los cambios en la base de datos
+                res.json(user);
+
+            } else {
+                res.status(404).json({ error: 'usuario no encontrado' });
+            }
+
+        } else {
+            res.status(404).json({ error: 'Contraseña no valida' });
+        }
+
+    } catch (error) {
+        console.error('Error al cambiar la contraseña:', error);
+        res.status(500).json({ error: 'Error al cambiar la contraseña' });
+    }
+}
+
+async function cambiarContraUsuario(req, res) {
+    const { usuario, password, contrasen } = req.body;
+    try {
+        const user = await Usuario.findOne({
+            where: {
+                correo: usuario,
+            },
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        const passwordsMatch = await bcrypt.compare(password, user.contrasenia);
+
+        if (!passwordsMatch) {
+            return res.status(401).json({ error: 'La clave actual es incorrecta' });
+        }
+
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
+        if (!regex.test(contrasen)) {
+            return res.status(400).json({ error: 'Nueva contraseña no válida' });
+        }
+
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
+
+        user.contrasenia = hashedPassword;
+
+        await user.save(); // Guarda los cambios en la base de datos
+        res.json(user);
+    } catch (error) {
+        console.error('Error al autenticar el usuario:', error);
+        res.status(500).json({ error: 'Error al autenticar el usuario' });
+    }
+}
+
+
 module.exports = {
     obtenerUsuario,
     obtenerUnUsuario,
@@ -263,5 +364,8 @@ module.exports = {
     eliminarUsuarioPorId,
     actualizarUsuarioPorId,
     obtenerUsuarioFiltrado,
-    login
+    login,
+    olvidarContraUsuario,
+    cambiarContraUsuario,
+    enviarCorreoContrasenia
 };

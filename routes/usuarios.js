@@ -19,6 +19,9 @@ router.put('/crearCliente/', usuarioController.crearUsuarioCliente);
 router.delete('/eliminar/:cedula', usuarioController.eliminarUsuarioPorId);
 router.patch('/actualizar/:cedula', usuarioController.actualizarUsuarioPorId);
 
+router.post('/olvidarContra', usuarioController.olvidarContraUsuario);
+router.post('/cambiarContra', usuarioController.cambiarContraUsuario);
+router.post('/enviarCorreo/:destinatario',usuarioController.enviarCorreoContrasenia)
 
 
 
