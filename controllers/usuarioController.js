@@ -318,7 +318,7 @@ async function enviarCorreoContrasenia(req, res) {
 
 
 async function olvidarContraUsuario(req, res) {
-    const { usuario, contrasen, } = req.body;
+    const { contrasen, } = req.body;
     const { token } = req.params;
     try {
 

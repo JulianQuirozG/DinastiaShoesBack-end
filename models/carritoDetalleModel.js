@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
+const Inventario = require('./inventarioModel');
 
 const CarritoDetalle = sequelize.define('carrito_detalle', {
     inventario_codigo: {
@@ -21,7 +22,8 @@ const CarritoDetalle = sequelize.define('carrito_detalle', {
     timestamps: false,
   }
   );
-  
+    
+  //CarritoDetalle.belongsTo(Inventario);
   CarritoDetalle.sync();
 
   module.exports = CarritoDetalle;

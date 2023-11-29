@@ -76,15 +76,18 @@ async function eliminarImagenes(req, res) {
         const medio = await MedioDePago.findByPk(id);
 
         if (medio) {
-           // const { respuesta: resQr, error: errorQr } = await deleteFile(medio.qr);
-           // const { respuesta: resLogo, error: errorLogo } = await deleteFile(medio.logo);
+            if(medio.logo){
+                const { respuesta: resQr, error: errorQr } = await deleteFile(medio.logo);
+            } 
+            if(medio.qr){
+                const { respuesta: resLogo, error: errorLogo } = await deleteFile(medio.qr);
+            }
 
-            //if (resQr || resLogo) {
-                await medio.destroy(); // Elimina el producto de la base de datos
-                res.json({ mensaje: 'Imagenes eliminada exitosamente' });
-           // } else {
-           //     res.status(500).json({ error: 'Error al eliminar la imagen', detalle: error });
-           // }
+            // Elimina el producto de la base de datos
+            await medio.destroy();
+            res.json({ mensaje: 'Imagenes eliminada exitosamente' });
+
+            
         } else {
             res.status(404).json({ error: 'Imagen no encontrada' });
         }

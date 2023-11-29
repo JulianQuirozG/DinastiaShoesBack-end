@@ -11,6 +11,7 @@ const fotosRouter = require('./routes/fotos');
 const categoriaRouter = require('./routes/categoria');
 const inventarioRouter = require('./routes/inventario');
 const medioRouter = require('./routes/medioPago');
+const carritoRouter = require('./routes/carrito');
 app.use(cors());
 app.use(morgan('dev'))
 app.use(express.json())
@@ -23,6 +24,7 @@ app.use('/categoria',categoriaRouter);
 app.use('/fotos',fotosRouter);
 app.use('/inventario',inventarioRouter);
 app.use('/medioPago',medioRouter);
+app.use('/carrito',carritoRouter);
 
 app.listen(port, ()=>{
     console.log(`server on port ${port}`);

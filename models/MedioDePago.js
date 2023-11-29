@@ -15,6 +15,7 @@ const MedioPago = sequelize.define('mediopago', {
     },
     logo: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     qr: {
       type: DataTypes.STRING,

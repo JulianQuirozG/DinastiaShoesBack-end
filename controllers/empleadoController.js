@@ -4,7 +4,11 @@ const Usuario = require('../models/usuarioModel');
 //Listar Empleado
 async function obtenerEmpleados(req, res) {
     try {
-        const emple = await Empleado.findAll();
+        const emple = await Usuario.findAll({
+            include: [{
+                model: Empleado,
+            }]
+        });
         res.json(emple);
     } catch (error) {
         console.error('Error al obtener informacion de los empleados:', error);
@@ -16,7 +20,11 @@ async function obtenerEmpleados(req, res) {
 async function obtenerUnEmpleado(req, res) {
     const { cedula } = req.params;
     try {
-        const emple = await Empleado.findByPk(cedula);
+        const emple = await Usuario.findByPk(cedula, {
+            include: [{
+                model: Empleado,
+            }]
+        });
         res.json(emple);
     } catch (error) {
         console.error('Error al obtener Empleado', error);
