@@ -17,6 +17,38 @@ async function obtenerUsuario(req, res) {
     }
 }
 
+async function obtenerClientes(req, res) {
+    try {
+        const user = await Usuario.findAll({
+            include: [
+                {
+                    model: Cliente,
+                },
+            ]
+        });
+        res.json(user);
+    } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        res.status(500).json({ error: 'Error al obtener usuario' });
+    }
+}
+
+async function obtenerEmpleados(req, res) {
+    try {
+        const user = await Usuario.findAll({
+            include: [
+                {
+                    model: Empleado,
+                },
+            ]
+        });
+        res.json(user);
+    } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        res.status(500).json({ error: 'Error al obtener usuario' });
+    }
+}
+
 //Listar Usuarios Filtrados
 async function obtenerUsuarioFiltrado(req, res) {
     const { filtro } = req.params;
@@ -229,11 +261,12 @@ async function login(req, res) {
                 const payload = {
                     cedula: user.cedula,
                     nombres: user.nombres,
-                    tipo: user.tipo
+                    tipo: user.tipo,
+                    correo: user.correo,
                 };
 
 
-                const token = jwt.sign(payload, 'DinastiaShoes2023', { expiresIn: '1h' });
+                const token = jwt.sign(payload, process.env.JWT_PASS, { expiresIn: '1h' });
 
                 //res.json(passwordsMatch);
                 res.status(200).send({ token: token, usuario: user });
@@ -256,10 +289,14 @@ async function enviarCorreoContrasenia(req, res) {
     try {
         const { destinatario } = req.params;
 
-        const token = jwt.sign({ destinatario }, process.env.JWT_PASS, { expiresIn: '15m' });
+        const payload = {
+            correo: destinatario,
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_PASS, { expiresIn: '15m' });
 
         const asunto = 'Recuperar contraseña DinastiaShoes';
-        const cuerpo = `Haz click en el siguiente link para poder reestablecer tu contraseña: localhost:3000/recovery/reset/${token}`;
+        const cuerpo = `Haz click en el siguiente link para poder reestablecer tu contraseña: http://localhost:3001/recovery/reset/${token}`;
 
         const mailOptions = {
             from: 'dinastiashoesoficial@hotmail.com',
@@ -282,8 +319,15 @@ async function enviarCorreoContrasenia(req, res) {
 
 async function olvidarContraUsuario(req, res) {
     const { usuario, contrasen, } = req.body;
+    const { token } = req.params;
     try {
-        // Crea un nuevo usuario en la base de datos
+
+        const decoded = jwt.verify(token, process.env.JWT_PASS);
+        if (!decoded) {
+            console.error('Error en la sesion', error);
+            res.status(500).json({ error: 'Error en la sesion' });
+        }
+
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
         if (regex.test(contrasen)) {
 
@@ -292,7 +336,7 @@ async function olvidarContraUsuario(req, res) {
             const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
             const user = await Usuario.findOne({
                 where: {
-                    correo: usuario,
+                    correo: decoded.correo,
                 },
             });
 
@@ -354,10 +398,34 @@ async function cambiarContraUsuario(req, res) {
     }
 }
 
+async function obtenerUnUsuarioPorToken(req, res) {
+    const { token } = req.params;
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_PASS);
+        if (!decoded) {
+            console.error('Error en la sesion', error);
+            res.status(500).json({ error: 'Error en la sesion' });
+        }
+        const user = await Usuario.findOne({
+            where: {
+                correo: decoded.correo,
+            },
+            //attributes: { exclude: ['createdAt', 'updatedAt'] }
+        });
+        res.json(user);
+    } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        res.status(500).json({ error: 'Error al obtener usuario' });
+    }
+}
+
 
 module.exports = {
     obtenerUsuario,
     obtenerUnUsuario,
+    obtenerEmpleados,
+    obtenerClientes,
     crearUsuarioAdmin,
     crearUsuarioCliente,
     crearUsuarioEmpleado,
@@ -367,5 +435,6 @@ module.exports = {
     login,
     olvidarContraUsuario,
     cambiarContraUsuario,
-    enviarCorreoContrasenia
+    enviarCorreoContrasenia,
+    obtenerUnUsuarioPorToken
 };

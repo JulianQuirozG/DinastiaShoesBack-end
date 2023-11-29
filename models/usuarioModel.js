@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
+const Cliente = require('./clienteModel');
+const Empleado = require('./empleadoModel');
 
 const Usuario = sequelize.define('usuario', {
     cedula: {
@@ -40,6 +42,7 @@ const Usuario = sequelize.define('usuario', {
     timestamps: false,
   }
   );
-
+  Usuario.hasMany(Cliente, { foreignKey: 'cedula' });
+  Usuario.hasMany(Empleado, { foreignKey: 'cedula' });
   Usuario.sync();
   module.exports = Usuario;

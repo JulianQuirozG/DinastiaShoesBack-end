@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
 
 const CarritoDetalle = sequelize.define('carrito_detalle', {
-    inventario: {
+    inventario_codigo: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
@@ -21,7 +21,7 @@ const CarritoDetalle = sequelize.define('carrito_detalle', {
     timestamps: false,
   }
   );
-
+  
   CarritoDetalle.sync();
 
   module.exports = CarritoDetalle;

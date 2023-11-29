@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
+const Producto = require('./productoModel');
 
 const Categoria = sequelize.define('categoria', {
     id: {
@@ -21,6 +22,8 @@ const Categoria = sequelize.define('categoria', {
     timestamps: false,
   }
   );
+  
+  Categoria.hasMany(Producto, { foreignKey: 'categoria_id' });
 
   Categoria.sync();
 

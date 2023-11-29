@@ -36,7 +36,7 @@ const Producto = sequelize.define('producto', {
 
 //Producto.hasMany(Inventario, { foreignKey: 'producto_codigo' });
 Producto.hasMany(Inventario, { foreignKey: 'producto_codigo' });
-Inventario.hasMany(Foto, { foreignKey: 'inventario_codigo' });
+//Inventario.hasMany(Foto, { foreignKey: 'inventario_codigo' });
 
 Producto.sync();
 
