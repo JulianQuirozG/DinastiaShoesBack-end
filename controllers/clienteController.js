@@ -4,8 +4,11 @@ const Usuario = require('../models/usuarioModel');
 //Listar clientes
 async function obtenerClientes(req, res) {
     try {
-        const client = await Cliente.findAll({
+        const client = await Usuario.findAll({
             // attributes: { exclude: ['createdAt', 'updatedAt'] }
+            include:[{
+                model: Cliente,
+            },]
         });
         res.json(client);
     } catch (error) {
@@ -18,8 +21,11 @@ async function obtenerClientes(req, res) {
 async function obtenerUnCliente(req, res) {
     const { cedula } = req.params;
     try {
-        const client = await Cliente.findByPk(cedula, {
-            //attributes: { exclude: ['createdAt', 'updatedAt'] }
+        const client = await Usuario.findByPk(cedula,{
+            // attributes: { exclude: ['createdAt', 'updatedAt'] }
+            include:[{
+                model: Cliente,
+            },]
         });
         res.json(client);
     } catch (error) {

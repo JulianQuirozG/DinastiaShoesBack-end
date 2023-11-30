@@ -11,5 +11,6 @@ router.get('/obtener/:codigo', inventarioController.obtenerUnProductodelInventar
 router.put('/crear', inventarioController.crearInventarioProducto);
 router.delete('/eliminar/:codigo', inventarioController.eliminarInventarioProductoPorId);
 router.patch('/actualizar/:codigo', inventarioController.actualizarProductoPorId);
+router.post('/ObtenerVariantesPorColor', inventarioController.obtenerVariantesdeProductodelInventario);
 
 module.exports = router;

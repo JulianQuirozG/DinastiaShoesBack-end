@@ -136,6 +136,7 @@ const updateToFirebaseAndSaveLink = async (req, res) => {
         medio.logo = url_logo;
         medio.qr = url_qr;
         medio.color = color;
+        medio.info = info;
 
         await medio.save();
         return res.json({ success: true, medio });

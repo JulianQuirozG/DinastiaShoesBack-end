@@ -27,7 +27,7 @@ async function obtenerUnProductodelInventario(req, res) {
     const { codigo } = req.params;
 
     try {
-        const producto = await Inventario.findByPk(codigo,{
+        const producto = await Inventario.findByPk(codigo, {
             include: [
                 {
                     model: Foto,
@@ -49,12 +49,12 @@ async function crearInventarioProducto(req, res) {
 
     try {
         // Crea un nuevo producto en la base de datos
-        const nuevoInventarioProducto = await Inventario.create({ 
-            cantidad, 
-            talla, 
-            color, 
-            precio, 
-            descuento, 
+        const nuevoInventarioProducto = await Inventario.create({
+            cantidad,
+            talla,
+            color,
+            precio,
+            descuento,
             producto_codigo
         });
 
@@ -111,10 +111,38 @@ async function actualizarProductoPorId(req, res) {
     }
 }
 
+//OBTENER UN PRODUCTO POR EL ID
+async function obtenerVariantesdeProductodelInventario(req, res) {
+    const { codigo, color } = req.body;
+
+    try {
+        const producto = await Inventario.findAll({
+            where: {
+                color: color,
+                producto_codigo: codigo,
+
+            },
+            include: [
+                {
+                    model: Foto,
+                }
+            ]
+        });
+
+        res.json(producto);
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).json({ error: 'Error al obtener productos' });
+    }
+}
+
+
+
 module.exports = {
     actualizarProductoPorId,
     eliminarInventarioProductoPorId,
     crearInventarioProducto,
     obtenerUnProductodelInventario,
     obtenerInventarioProductos,
+    obtenerVariantesdeProductodelInventario,
 };
