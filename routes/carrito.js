@@ -7,5 +7,6 @@ const app= express()
 
 // Rutas para Clientes
 router.get('/listar/:cedula', carritoController.obtenerCarrito);
+router.post('/agregarProducto', carritoController.crearCarritoYagregarProducto);
 
 module.exports = router;

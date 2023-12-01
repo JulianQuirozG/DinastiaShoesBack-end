@@ -28,24 +28,65 @@ async function obtenerCarrito(req, res) {
 }
 
 
-//CREAR UN PRODUCTO
-async function crearProducto(req, res) {
-  const { codigo, nombre, descripcion, destacado, categoria_id } = req.body;
+//CREAR UN CARRITO
+async function crearCarritoYagregarProducto(req, res) {
+  const { cedula, producto, cantidad } = req.body;
 
   try {
-    // Crea un nuevo producto en la base de datos
-    const nuevoProducto = await Producto.create({
-      codigo,
-      nombre,
-      descripcion,
-      destacado,
-      categoria_id
+    const carrito = await Carrito.findOne({
+      where: {
+        cliente_cedula: cedula,
+      },
     });
 
-    res.json(nuevoProducto);
+    const cantidadInventario = await Inventario.findByPk(producto);
+
+    const cantidadvs = cantidadInventario.cantidad;
+    if (cantidad > cantidadvs) {
+      return res.json({ error: "La cantidad asignada excede las existencias disponibles" });
+    }
+
+    if (!carrito) {
+
+      const nuevoCarrito = await Carrito.create({
+        cliente_cedula: cedula,
+      });
+
+      const id = nuevoCarrito.id;
+
+      const agregarCarrito = await CarritoDetalle.create({
+        inventario_codigo: producto,
+        carrito_id: id,
+        cantidad: cantidad
+      })
+      return res.json(agregarCarrito);
+
+    } else {
+      const id = carrito.id;
+
+      const productoExist = await CarritoDetalle.findOne({
+        where: {
+          carrito_id: id,
+          inventario_codigo: producto,
+        }
+      });
+
+      if (productoExist) {
+        productoExist.cantidad = cantidad;
+        await productoExist.save();
+        return res.json(productoExist);
+      } else {
+        const agregarCarrito = await CarritoDetalle.create({
+          inventario_codigo: producto,
+          carrito_id: id,
+          cantidad: cantidad
+        })
+        return res.json(agregarCarrito);
+      }
+    }
   } catch (error) {
-    console.error('Error al crear el producto:', error);
-    res.status(500).json({ error: 'Error al crear el producto' });
+    console.error('Error al agregar el producto al carrito:', error);
+    res.status(500).json({ error: 'Error al agregar el producto al carrito' });
   }
 }
 
@@ -124,4 +165,5 @@ async function obtenerProductoFiltrado(req, res) {
 
 module.exports = {
   obtenerCarrito,
+  crearCarritoYagregarProducto,
 };
