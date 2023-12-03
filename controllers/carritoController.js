@@ -91,17 +91,22 @@ async function crearCarritoYagregarProducto(req, res) {
 }
 
 //ELIMINAR UN PRODUCTO
-async function eliminarProductoPorId(req, res) {
-  const { codigo } = req.params;
-  await console.log("codigo: ", codigo);
+async function eliminarInventariodelCarritoPorId(req, res) {
+
   try {
-    const producto = await Producto.findByPk(codigo);
-    console.log(producto);
-    if (producto) {
-      await producto.destroy(); // Elimina el producto de la base de datos
-      res.json({ mensaje: 'Producto eliminado exitosamente' });
+    const { id, inventa } = req.body;
+    const eliminarProducto = await CarritoDetalle.findOne({
+      where: {
+        carrito_id: id,
+        inventario_codigo: inventa,
+      },
+    });
+
+    if (eliminarProducto) {
+      await eliminarProducto.destroy(); // Elimina el producto de la base de datos
+      return res.json({ mensaje: 'Producto eliminado exitosamente' });
     } else {
-      res.status(404).json({ error: 'Producto no encontrado' });
+      return res.status(404).json({ error: 'Producto no encontrado en el carrito' });
     }
   } catch (error) {
     console.error('Error al eliminar el producto:', error);
@@ -109,6 +114,30 @@ async function eliminarProductoPorId(req, res) {
   }
 }
 
+async function eliminarTodosInventariodelCarrito(req, res) {
+
+  try {
+    const id = parseInt(req.params.id,10);
+    const eliminarProductos = await CarritoDetalle.findAll({
+      where:{
+        carrito_id: id,
+      },
+    });
+
+    if (eliminarProductos && eliminarProductos.length > 0) {
+      await Promise.all(eliminarProductos.map(async (producto) => {
+        await producto.destroy();
+      })); // Elimina el producto de la base de datos
+
+      return res.json({ mensaje: 'Productos eliminados exitosamente' });
+    } else {
+      return res.status(404).json({ error: 'El carrito está vacio' });
+    }
+  } catch (error) {
+    console.error('Error al eliminar el producto:', error);
+    res.status(500).json({ error: 'Error al eliminar el producto' });
+  }
+}
 
 //actualizar por id
 async function actualizarProductoPorId(req, res) {
@@ -163,7 +192,11 @@ async function obtenerProductoFiltrado(req, res) {
   }
 }
 
+
+
 module.exports = {
   obtenerCarrito,
   crearCarritoYagregarProducto,
+  eliminarInventariodelCarritoPorId,
+  eliminarTodosInventariodelCarrito
 };
