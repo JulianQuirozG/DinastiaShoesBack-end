@@ -7,6 +7,7 @@ const Pedido = sequelize.define('pedido', {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
+      autoIncrement: true,
     },
     direccion: {
       type: DataTypes.STRING,
