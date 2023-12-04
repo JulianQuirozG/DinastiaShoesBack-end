@@ -147,6 +147,27 @@ async function eliminarPedido(req, res) {
   }
 }
 
+async function actualizarPedidoId(req, res) {
+  const { id, estado } = req.body;
+
+  try {
+    const carrito = await Pedido.findByPk(id);
+
+    if (carrito) {
+      // Actualiza los datos del producto
+      carrito.estado = estado;
+
+      await carrito.save(); // Guarda los cambios en la base de datos
+      res.json(carrito);
+    } else {
+      res.status(404).json({ error: 'Pedido no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al actualizar el pedido:', error);
+    res.status(500).json({ error: 'Error al actualizar el pedido',message: error });
+  }
+}
+
 async function eliminarTodosInventariodelCarrito(req, res) {
 
   try {
@@ -173,30 +194,7 @@ async function eliminarTodosInventariodelCarrito(req, res) {
 }
 
 //actualizar por id
-async function actualizarProductoPorId(req, res) {
-  const { codigo } = req.params;
-  const { nombre, descripcion, destacado, categoria_id } = req.body;
 
-  try {
-    const producto = await Producto.findByPk(codigo);
-
-    if (producto) {
-      // Actualiza los datos del producto
-      producto.nombre = nombre;
-      producto.descripcion = descripcion;
-      producto.destacado = destacado;
-      producto.categoria_id = categoria_id;
-
-      await producto.save(); // Guarda los cambios en la base de datos
-      res.json(producto);
-    } else {
-      res.status(404).json({ error: 'Producto no encontrado' });
-    }
-  } catch (error) {
-    console.error('Error al actualizar el producto:', error);
-    res.status(500).json({ error: 'Error al actualizar el producto' });
-  }
-}
 
 async function obtenerProductoFiltrado(req, res) {
   const { categoria } = req.body;
@@ -231,5 +229,6 @@ module.exports = {
   obtenerPedido,
   crearPedido,
   eliminarPedido,
-  obtenerUnPedido
+  obtenerUnPedido,
+  actualizarPedidoId
 };

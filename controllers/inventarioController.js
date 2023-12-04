@@ -1,6 +1,7 @@
 const Producto = require('../models/productoModel'); // Importa el modelo de usuario
 const Inventario = require('../models/inventarioModel');
 const Foto = require('../models/fotoModel');
+const { async } = require('@firebase/util');
 
 //LISTAR PRODUCTOS
 async function obtenerInventarioProductos(req, res) {
@@ -71,6 +72,16 @@ async function eliminarInventarioProductoPorId(req, res) {
     await console.log("codigo: ", codigo);
     try {
         const productoInv = await Inventario.findByPk(codigo);
+        const fotos = await Foto.findAll({
+            where: {
+                inventario_codigo: codigo,
+            },
+        });
+        if (fotos.length > 0) {
+            fotos.map(async (fo)=>{
+                fo.destroy();
+            });
+        }
         if (productoInv) {
             await productoInv.destroy(); // Elimina el producto de la base de datos
             res.json({ mensaje: 'Producto eliminado exitosamente' });
