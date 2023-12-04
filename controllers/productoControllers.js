@@ -120,7 +120,7 @@ async function actualizarProductoPorId(req, res) {
 }
 
 async function obtenerProductoFiltrado(req, res) {
-  const { categoria } = req.body;
+  const { categoria } = req.params;
   try {
     const catego = await Producto.findAll({
       where: {
