@@ -77,6 +77,7 @@ async function eliminarInventarioProductoPorId(req, res) {
                 inventario_codigo: codigo,
             },
         });
+        
         if (fotos.length > 0) {
             fotos.map(async (fo)=>{
                 fo.destroy();

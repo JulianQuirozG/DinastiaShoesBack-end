@@ -7,6 +7,18 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
         const producto = req.params.producto;
         const image = req.files;
 
+        const fotos = await Foto.findAll({
+            where: {
+                inventario_codigo: producto,
+            },
+        });
+        
+        if (fotos.length > 0) {
+            fotos.map(async (fo)=>{
+                fo.destroy();
+            });
+        }
+
         if (image && image.length > 0) {
 
             const uploadImagesP = image.map(async (images) => {
