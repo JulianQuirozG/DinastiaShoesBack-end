@@ -101,7 +101,7 @@ async function crearPedido(req, res) {
       mediopago_id: mediodepago,
 
     });
-
+    
 
     const carritoDetalle = carrito.map(async (carr) => {
 

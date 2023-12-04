@@ -8,18 +8,27 @@ const CarritoDetalle = require('../models/carritoDetalleModel');
 async function obtenerCarrito(req, res) {
   try {
     const { cedula } = req.params;
-    const carrito = await Carrito.findAll({
+    const carrito = await Carrito.findOne({
       where: {
         cliente_cedula: cedula,
       },
+    })
+
+    const carritoDetalle = await Inventario.findAll({
       include: [
         {
           model: CarritoDetalle,
+          where:{
+            carrito_id: carrito.id,
+          }
         },
+        {
+          model: Foto,
+        }
       ]
     });
 
-    res.json(carrito);
+    res.json(carritoDetalle);
 
   } catch (error) {
     console.error('Error al obtener carrito:', error);
