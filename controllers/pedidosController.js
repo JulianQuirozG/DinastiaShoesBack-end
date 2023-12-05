@@ -33,20 +33,20 @@ async function obtenerUnPedido(req, res) {
   try {
     const { id } = req.params;
     const carrito = await Inventario.findAll({
-      include:[
+      include: [
         {
           model: PedidoDetalle,
           where: {
             pedido_id: id,
           },
-        }, 
+        },
         {
           model: Foto,
         },
-   
+
       ],
-      
-    
+
+
     });
 
     res.json(carrito);
@@ -71,25 +71,25 @@ async function crearPedido(req, res) {
     });
 
     if (carrito.length == 0) {
-      return res.error(500).json("debes agregar productos al carrito");
+      return res.status(500).json("debes agregar productos al carrito");
     }
 
     if (!cliente_cedula) {
-      return res.error(500).json("debes iniciar sesion");
+      return res.status(500).json("debes iniciar sesion");
     }
 
     const clienteinfo = await Cliente.findOne({
       where: {
         cedula: cliente_cedula,
       },
-    })
+    });
 
     if (!comprobar) {
-      return res.error(500).json("debes agregar una imagen para el comprobante");
+      return res.status(500).json("debes agregar una imagen para el comprobante");
     }
+
     const { ref: refLogo, downloadURL: downloadURLLogo } = await uploadFile(comprobar[0]);
     const url = downloadURLLogo;
-    //console.log(downloadURLLogo);
 
     const pedido = await Pedido.create({
       direccion: clienteinfo.direccion_completa,
@@ -101,20 +101,39 @@ async function crearPedido(req, res) {
       mediopago_id: mediodepago,
 
     });
-    
+
 
     const carritoDetalle = carrito.map(async (carr) => {
+      const productoinventario = await Inventario.findOne({
+        where: {
+          codigo: carr.inventario_codigo,
+        },
+      });
 
-      const productopedido = await PedidoDetalle.create({
-        pedido_id: pedido.id,
-        inventario_codigo: carr.inventario_codigo,
-        cantidad: carr.cantidad
-      })
+      if (carr.cantidad <= productoinventario.cantidad) {
 
-      return { productopedido };
+        if (productoinventario) {
+          productoinventario.cantidad = productoinventario.cantidad - carr.cantidad;
+          productoinventario.save();
+        }
 
+        const productopedido = await PedidoDetalle.create({
+          pedido_id: pedido.id,
+          inventario_codigo: carr.inventario_codigo,
+          cantidad: carr.cantidad
+        })
+
+        return { productopedido };
+      }
     });
+
     const respuesta = await Promise.all(carritoDetalle);
+
+    const carritoEliminar = carrito.map(async (carr) => {
+      carr.destroy();
+    });
+    
+    const eliminar = await Promise.all(carritoEliminar);
 
     return res.json(respuesta);
   }
@@ -164,7 +183,7 @@ async function actualizarPedidoId(req, res) {
     }
   } catch (error) {
     console.error('Error al actualizar el pedido:', error);
-    res.status(500).json({ error: 'Error al actualizar el pedido',message: error });
+    res.status(500).json({ error: 'Error al actualizar el pedido', message: error });
   }
 }
 
@@ -196,32 +215,6 @@ async function eliminarTodosInventariodelCarrito(req, res) {
 //actualizar por id
 
 
-async function obtenerProductoFiltrado(req, res) {
-  const { categoria } = req.body;
-  try {
-    const catego = await Producto.findAll({
-      where: {
-        destacado: categoria,
-      },
-      include: [
-        {
-          model: Inventario,
-          include: [
-            {
-              model: Foto
-            }
-          ]
-        },
-
-      ]
-
-    });
-    res.json(catego);
-  } catch (error) {
-    console.error('Error al obtener Producto filtrada:', error);
-    res.status(500).json({ error: 'Error al obtener Producto filtrada' });
-  }
-}
 
 
 
