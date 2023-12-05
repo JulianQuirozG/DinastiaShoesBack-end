@@ -11,6 +11,8 @@ router.get('/obtener/:codigo', productController.obtenerUnProducto);
 router.put('/crear/', productController.crearProducto);
 router.delete('/eliminar/:codigo', productController.eliminarProductoPorId);
 router.patch('/actualizar/:codigo', productController.actualizarProductoPorId);
-router.get('/filtrar/:categoria',productController.obtenerProductoFiltrado)
+router.get('/filtrar/:categoria',productController.obtenerProductoFiltrado);
+router.get('/listarColoresTallas', productController.obtenerTallasColoresCategorias);
+router.post('/filtrarColoresTallas', productController.obtenerFiltradoTallaColor);
 
 module.exports = router;

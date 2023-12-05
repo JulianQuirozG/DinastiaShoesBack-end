@@ -1,6 +1,7 @@
 const Producto = require('../models/productoModel'); // Importa el modelo de usuario
 const Inventario = require('../models/inventarioModel');
 const Foto = require('../models/fotoModel');
+const Categoria = require('../models/categoriaModel');
 
 //LISTAR PRODUCTOS
 async function obtenerProductos(req, res) {
@@ -20,6 +21,101 @@ async function obtenerProductos(req, res) {
     });
 
     res.json(producto);
+
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error al obtener productos' });
+  }
+}
+
+//
+async function obtenerTallasColoresCategorias(req, res) {
+  try {
+    const colores = await Inventario.findAll({
+      attributes: ['color'],
+      group: ['color'],
+    });
+
+    const tallas = await Inventario.findAll({
+      attributes: ['talla'],
+      group: ['talla'],
+    });
+
+    const categorias = await Categoria.findAll({
+      attributes: ['nombre'],
+      group: ['nombre'],
+    });
+
+    res.json({ colores, tallas, categorias });
+
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error al obtener productos' });
+  }
+}
+
+async function obtenerFiltradoTallaColor(req, res) {
+  try {
+    const { color, talla } = req.body;
+    let col, tal;
+    if (!color || color.length == 0) {
+      col = `*`;
+    } else {
+      col = color;
+    }
+    if (!talla || talla.length == 0) {
+      tal = `*`;
+    } else {
+      tal = talla;
+    }
+
+    if (color && talla && color.length > 0 && talla.length > 0) {
+      const productos = await Producto.findAll({
+        include: [
+          {
+            model: Inventario,
+            where: {
+              color: col,
+              talla: tal,
+            }
+          }
+        ]
+      });
+      return res.json(productos);
+    } else if (color && color.length > 0) {
+      const productos = await Producto.findAll({
+        include: [
+          {
+            model: Inventario,
+            where: {
+              color: col,
+            }
+          }
+        ]
+      });
+      return res.json(productos);
+    } else if (talla && talla.length > 0) {
+      const productos = await Producto.findAll({
+        include: [
+          {
+            model: Inventario,
+            where: {
+              talla: tal,
+            }
+          }
+        ]
+      });
+      return res.json(productos);
+    } else {
+      const productos = await Producto.findAll({
+        include: [
+          {
+            model: Inventario,
+          }
+        ]
+      });
+      return res.json(productos);
+    }
 
   } catch (error) {
     console.error('Error al obtener productos:', error);
@@ -152,5 +248,7 @@ module.exports = {
   crearProducto,
   eliminarProductoPorId,
   actualizarProductoPorId,
-  obtenerProductoFiltrado
+  obtenerProductoFiltrado,
+  obtenerTallasColoresCategorias,
+  obtenerFiltradoTallaColor
 };
