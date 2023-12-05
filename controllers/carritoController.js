@@ -12,21 +12,42 @@ async function obtenerCarrito(req, res) {
       where: {
         cliente_cedula: cedula,
       },
-    })
+    });
 
-    const carritoDetalle = await Inventario.findAll({
+    const carritoDetalle = await Producto.findAll({
       include: [
         {
-          model: CarritoDetalle,
-          where:{
-            carrito_id: carrito.id,
-          }
+          model: Inventario,
+          required: true,
+          include: [
+            {
+              model: CarritoDetalle,
+              where: {
+                carrito_id: carrito.id,
+              }
+            },
+            {
+              model: Foto,
+            },
+            
+          ]
         },
-        {
-          model: Foto,
-        }
       ]
     });
+
+    // const carritoDetalle = await Inventario.findAll({
+    //   include: [
+    //     {
+    //       model: CarritoDetalle,
+    //       where:{
+    //         carrito_id: carrito.id,
+    //       }
+    //     },
+    //     {
+    //       model: Foto,
+    //     },
+    //   ]
+    // });
 
     res.json(carritoDetalle);
 
@@ -126,9 +147,9 @@ async function eliminarInventariodelCarritoPorId(req, res) {
 async function eliminarTodosInventariodelCarrito(req, res) {
 
   try {
-    const id = parseInt(req.params.id,10);
+    const id = parseInt(req.params.id, 10);
     const eliminarProductos = await CarritoDetalle.findAll({
-      where:{
+      where: {
         carrito_id: id,
       },
     });
