@@ -1,3 +1,4 @@
+const { Sequelize } = require('sequelize');
 const Foto = require('../models/fotoModel'); // Asegúrate de tener el modelo Foto configurado correctamente
 const { uploadFile, deleteFile } = require('../util/adminFirebase');
 
@@ -63,6 +64,19 @@ async function obtenerLinkImagenes(req, res) {
     }
 }
 
+async function obtenerLinkImagenesHome(req, res) {
+    try {
+        const foto = await Foto.findAll({
+            order: Sequelize.literal('RAND()'), // Ordenar aleatoriamente
+            limit: 8,
+        });
+        res.json(foto);
+    } catch (error) {
+        console.error('Error al obtener informacion las imagenes:', error);
+        res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+    }
+}
+
 async function obtenerLinkImagenesById(req, res) {
     try {
         const { producto } = req.params;
@@ -107,6 +121,7 @@ module.exports = {
     uploadToFirebaseAndSaveLink,
     obtenerLinkImagenes,
     obtenerLinkImagenesById,
-    eliminarImagenes
+    eliminarImagenes,
+    obtenerLinkImagenesHome
 
 };

@@ -11,5 +11,5 @@ router.post('/subirImagen/:producto', upload.array('image', 5), fotoController.u
 router.get('/listar', fotoController.obtenerLinkImagenes);
 router.get('/listar/:producto', fotoController.obtenerLinkImagenesById);
 router.delete('/eliminar/:id', fotoController.eliminarImagenes);
-
+router.get('/listaraleatorio', fotoController.obtenerLinkImagenesHome);
 module.exports = router;

@@ -29,25 +29,10 @@ async function obtenerCarrito(req, res) {
             {
               model: Foto,
             },
-            
           ]
         },
       ]
     });
-
-    // const carritoDetalle = await Inventario.findAll({
-    //   include: [
-    //     {
-    //       model: CarritoDetalle,
-    //       where:{
-    //         carrito_id: carrito.id,
-    //       }
-    //     },
-    //     {
-    //       model: Foto,
-    //     },
-    //   ]
-    // });
 
     res.json(carritoDetalle);
 
