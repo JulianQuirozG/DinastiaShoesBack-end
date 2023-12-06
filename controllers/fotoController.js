@@ -1,5 +1,8 @@
+const { async } = require('@firebase/util');
 const { Sequelize } = require('sequelize');
 const Foto = require('../models/fotoModel'); // Asegúrate de tener el modelo Foto configurado correctamente
+const Inventario = require('../models/inventarioModel');
+const Producto = require('../models/productoModel');
 const { uploadFile, deleteFile } = require('../util/adminFirebase');
 
 const uploadToFirebaseAndSaveLink = async (req, res) => {
@@ -13,9 +16,9 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
                 inventario_codigo: producto,
             },
         });
-        
+
         if (fotos.length > 0) {
-            fotos.map(async (fo)=>{
+            fotos.map(async (fo) => {
                 fo.destroy();
             });
         }
@@ -92,6 +95,37 @@ async function obtenerLinkImagenesById(req, res) {
     }
 }
 
+async function obtenerLinkImagenesByIdProducto(req, res) {
+    try {
+        const { producto } = req.params;
+        const product = await Producto.findByPk(producto, {
+            include: [
+                {
+                    model: Inventario,
+                }
+            ],
+        });
+
+        let traerImagenes = [];
+
+        if (product.inventarios.length > 0) {
+            traerImagenes = await Promise.all(product.inventarios.map(async (variante) => {
+                const fotos = await Foto.findAll({
+                    where: {
+                        inventario_codigo: variante.codigo,
+                    },
+                });
+                return { fotos };
+            }));
+        }
+
+        res.json(traerImagenes);
+    } catch (error) {
+        console.error('Error al obtener informacion las imagenes:', error);
+        res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+    }
+}
+
 async function eliminarImagenes(req, res) {
     try {
         const { id } = req.params;
@@ -122,6 +156,7 @@ module.exports = {
     obtenerLinkImagenes,
     obtenerLinkImagenesById,
     eliminarImagenes,
-    obtenerLinkImagenesHome
+    obtenerLinkImagenesHome,
+    obtenerLinkImagenesByIdProducto
 
 };

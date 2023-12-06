@@ -12,4 +12,5 @@ router.get('/listar', fotoController.obtenerLinkImagenes);
 router.get('/listar/:producto', fotoController.obtenerLinkImagenesById);
 router.delete('/eliminar/:id', fotoController.eliminarImagenes);
 router.get('/listaraleatorio', fotoController.obtenerLinkImagenesHome);
+router.get('/listarProducto/:producto', fotoController.obtenerLinkImagenesByIdProducto);
 module.exports = router;
