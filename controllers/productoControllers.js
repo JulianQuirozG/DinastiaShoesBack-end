@@ -77,7 +77,12 @@ async function obtenerFiltradoTallaColor(req, res) {
             where: {
               color: col,
               talla: tal,
-            }
+            },
+            include:[
+              {
+                model:Foto,
+              }
+            ]
           }
         ]
       });
@@ -89,7 +94,13 @@ async function obtenerFiltradoTallaColor(req, res) {
             model: Inventario,
             where: {
               color: col,
-            }
+            },
+            include:[
+              {
+                model:Foto,
+              }
+            ]
+            
           }
         ]
       });
@@ -101,7 +112,12 @@ async function obtenerFiltradoTallaColor(req, res) {
             model: Inventario,
             where: {
               talla: tal,
-            }
+            },
+            include:[
+              {
+                model:Foto,
+              }
+            ]
           }
         ]
       });
@@ -111,6 +127,11 @@ async function obtenerFiltradoTallaColor(req, res) {
         include: [
           {
             model: Inventario,
+            include:[
+              {
+                model:Foto,
+              }
+            ]
           }
         ]
       });
