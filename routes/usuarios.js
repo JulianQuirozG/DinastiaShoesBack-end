@@ -28,4 +28,6 @@ router.post('/enviarCorreo/:destinatario',usuarioController.enviarCorreoContrase
 
 router.get('/obtenerUsuarioPorToken/:token', usuarioController.obtenerUnUsuarioPorToken);
 
+router.post('/enviarCorreoContacto',usuarioController.enviarCorreoContactanos)
+
 module.exports = router;

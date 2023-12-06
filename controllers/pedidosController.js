@@ -8,11 +8,12 @@ const PedidoDetalle = require('../models/pedidoDetalleModel');
 const Cliente = require('../models/clienteModel');
 const { uploadFile } = require('../util/adminFirebase');
 const { where } = require('sequelize');
+const MedioPago = require('../models/MedioDePago');
+const Usuario = require('../models/usuarioModel');
 
 //LISTAR PRODUCTOS
 async function obtenerPedido(req, res) {
   try {
-    const { id } = req.params;
     const carrito = await Pedido.findAll({
       include: [
         {
@@ -21,7 +22,19 @@ async function obtenerPedido(req, res) {
       ]
     });
 
-    res.json(carrito);
+    const anexarMedioPago = await carrito.map(async (carr) => {
+      const medio = await MedioPago.findOne({
+        where: {
+          id: carr.mediopago_id,
+        }
+      });
+      console.log(medio)
+      return [{ carr }, { medio }]
+    });
+
+    const respuesta = await Promise.all(anexarMedioPago);
+
+    res.json(respuesta);
 
   } catch (error) {
     console.error('Error al obtener pedido:', error);
@@ -45,11 +58,25 @@ async function obtenerUnPedido(req, res) {
         },
 
       ],
-
-
     });
 
-    res.json(carrito);
+    const persona = await Usuario.findOne({
+      include: [
+        {
+          model: Cliente,
+          include: [
+            {
+              model: Pedido,
+              where: {
+                id: carrito[0].pedido_detalles[0].pedido_id,
+              }
+            }
+          ]
+        }
+      ]
+    });
+
+    return res.json([{ carrito }, { persona }]);
 
   } catch (error) {
     console.error('Error al obtener pedido:', error);
@@ -132,7 +159,7 @@ async function crearPedido(req, res) {
     const carritoEliminar = carrito.map(async (carr) => {
       carr.destroy();
     });
-    
+
     const eliminar = await Promise.all(carritoEliminar);
 
     return res.json(respuesta);

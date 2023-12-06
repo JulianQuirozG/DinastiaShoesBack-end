@@ -316,6 +316,31 @@ async function enviarCorreoContrasenia(req, res) {
 }
 
 
+async function enviarCorreoContactanos(req, res) {
+    try {
+        const { destinatario, nombre, apellido, pregunta } = req.body;
+
+        const asunto = `Contacto a DinastiaShoes de ${destinatario}`;
+
+        const cuerpo = 'De: ' +nombre + ' ' + apellido + '\n' + 'Inquietud: ' + pregunta;
+
+        const mailOptions = {
+            from: 'dinastiashoesoficial@hotmail.com',
+            to: 'dinastiashoesoficial@hotmail.com',
+            subject: asunto,
+            text: cuerpo,
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+
+        console.log('Correo enviado:', info.response);
+        res.status(200).json({ mensaje: 'Correo enviado exitosamente' });
+    } catch (error) {
+        console.error('Error al enviar el correo:', error);
+        res.status(500).json({ error: 'Error al enviar el correo' });
+    }
+}
+
 
 async function olvidarContraUsuario(req, res) {
     const { contrasen, } = req.body;
@@ -436,5 +461,6 @@ module.exports = {
     olvidarContraUsuario,
     cambiarContraUsuario,
     enviarCorreoContrasenia,
-    obtenerUnUsuarioPorToken
+    obtenerUnUsuarioPorToken,
+    enviarCorreoContactanos
 };
