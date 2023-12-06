@@ -10,6 +10,7 @@ const { uploadFile } = require('../util/adminFirebase');
 const { where } = require('sequelize');
 const MedioPago = require('../models/MedioDePago');
 const Usuario = require('../models/usuarioModel');
+const { async } = require('@firebase/util');
 
 //LISTAR PRODUCTOS
 async function obtenerPedido(req, res) {
@@ -41,6 +42,8 @@ async function obtenerPedido(req, res) {
     res.status(500).json({ error: 'Error al obtener el pedido' });
   }
 }
+
+
 
 async function obtenerUnPedido(req, res) {
   try {
@@ -78,14 +81,76 @@ async function obtenerUnPedido(req, res) {
 
     let costoTotal = 0;
     const costo = await carrito.map(async (carr) => {
-       const costos = carr.pedido_detalles[0].cantidad * carr.precio;
-       costoTotal =costos + costoTotal;
-      return {costoTotal}
+      const costos = carr.pedido_detalles[0].cantidad * carr.precio;
+      costoTotal = costos + costoTotal;
+      return { costoTotal }
     });
 
     const costoT = await Promise.all(costo);
 
-    return res.json([{ carrito }, { persona },{'Total': costoTotal}]);
+    return res.json([{ carrito }, { persona }, { 'Total': costoTotal }]);
+
+  } catch (error) {
+    console.error('Error al obtener pedido:', error);
+    res.status(500).json({ error: 'Error al obtener el pedido' });
+  }
+}
+
+
+async function obtenerPedidosPorUsuario(req, res) {
+  try {
+    const { cedula } = req.params;
+
+    const persona = await Cliente.findByPk(cedula, {
+      include: [
+        {
+          model: Pedido,
+        },
+      ],
+    });
+
+    const pedidos = await persona.pedidos.map(async (pedido) => {
+      const detalle = await PedidoDetalle.findAll({
+        where: {
+          pedido_id: pedido.id,
+        }
+      });
+      let costoTotal = 0;
+      const productoss = await Promise.all(
+        detalle.map(async (product)=>{
+          const producto = await Producto.findOne({
+            include: [
+              {
+                model: Inventario,
+                where: {
+                  codigo: product.inventario_codigo,
+                },
+                include:[
+                  {
+                    model: Foto,
+                  }
+                ]
+              },
+            ],
+          });
+
+          const costos = product.cantidad * producto.inventarios[0].precio;
+          costoTotal = costos + costoTotal;  
+
+          
+          return { product, producto };
+        })
+      );
+
+
+      return { pedido, productoss, costoTotal  };
+    });
+
+    const resultado = await Promise.all(pedidos);
+
+    //const inventario = await resultado.
+
+    return res.json(resultado);
 
   } catch (error) {
     console.error('Error al obtener pedido:', error);
@@ -259,5 +324,6 @@ module.exports = {
   crearPedido,
   eliminarPedido,
   obtenerUnPedido,
-  actualizarPedidoId
+  actualizarPedidoId,
+  obtenerPedidosPorUsuario
 };
