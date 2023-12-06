@@ -42,7 +42,7 @@ async function obtenerTallasColoresCategorias(req, res) {
     });
 
     const categorias = await Categoria.findAll({
-      attributes: ['nombre'],
+      attributes: ['id','nombre'],
       group: ['nombre'],
     });
 
