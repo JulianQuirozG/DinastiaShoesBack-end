@@ -76,7 +76,16 @@ async function obtenerUnPedido(req, res) {
       ]
     });
 
-    return res.json([{ carrito }, { persona }]);
+    let costoTotal = 0;
+    const costo = await carrito.map(async (carr) => {
+       const costos = carr.pedido_detalles[0].cantidad * carr.precio;
+       costoTotal =costos + costoTotal;
+      return {costoTotal}
+    });
+
+    const costoT = await Promise.all(costo);
+
+    return res.json([{ carrito }, { persona },{'Total': costoTotal}]);
 
   } catch (error) {
     console.error('Error al obtener pedido:', error);
