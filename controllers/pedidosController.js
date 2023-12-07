@@ -117,7 +117,7 @@ async function obtenerPedidosPorUsuario(req, res) {
       });
       let costoTotal = 0;
       const productoss = await Promise.all(
-        detalle.map(async (product)=>{
+        detalle.map(async (product) => {
           const producto = await Producto.findOne({
             include: [
               {
@@ -125,7 +125,7 @@ async function obtenerPedidosPorUsuario(req, res) {
                 where: {
                   codigo: product.inventario_codigo,
                 },
-                include:[
+                include: [
                   {
                     model: Foto,
                   }
@@ -135,15 +135,15 @@ async function obtenerPedidosPorUsuario(req, res) {
           });
 
           const costos = product.cantidad * producto.inventarios[0].precio;
-          costoTotal = costos + costoTotal;  
+          costoTotal = costos + costoTotal;
 
-          
+
           return { product, producto };
         })
       );
 
 
-      return { pedido, productoss, costoTotal  };
+      return { pedido, productoss, costoTotal };
     });
 
     const resultado = await Promise.all(pedidos);
@@ -229,6 +229,10 @@ async function crearPedido(req, res) {
     });
 
     const respuesta = await Promise.all(carritoDetalle);
+
+    if ((!respuesta) || (respuesta.length < 1)) {
+      pedido.destroy();
+    }
 
     const carritoEliminar = carrito.map(async (carr) => {
       carr.destroy();
