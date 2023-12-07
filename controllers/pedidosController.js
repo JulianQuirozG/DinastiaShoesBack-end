@@ -230,7 +230,13 @@ async function crearPedido(req, res) {
 
     const respuesta = await Promise.all(carritoDetalle);
    
-    if ((respuesta[0]==null)) {
+    const valdiar = await PedidoDetalle.findAll({
+      where:{
+        pedido_id:pedido.id,
+      }
+    });
+    console.log('calidar tiene= ' + valdiar);
+    if (valdiar.length==0) {
       await pedido.destroy();
       console.error('Error al crear el pedido:', error);
       return res.json({ error: 'No hay productos en el carrito' });
