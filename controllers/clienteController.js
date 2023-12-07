@@ -1,3 +1,4 @@
+const Carrito = require('../models/carritoModel');
 const Cliente = require('../models/clienteModel'); // Importa el modelo de usuario
 const Usuario = require('../models/usuarioModel');
 
@@ -50,6 +51,10 @@ async function crearCliente(req, res) {
                 direccion_completa,
                 informacion_complementaria,
                 telefono
+            });
+
+            const carrito = await Carrito.create({
+                cliente_cedula:cedula,
             });
 
             res.json(nuevoClient);
