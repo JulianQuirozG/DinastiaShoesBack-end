@@ -235,7 +235,14 @@ async function crearPedido(req, res) {
         pedido_id:pedido.id,
       }
     });
-    console.log('calidar tiene= ' + valdiar);
+    
+    const carritoEliminar = carrito.map(async (carr) => {
+      carr.destroy();
+    });
+
+    const eliminar = await Promise.all(carritoEliminar);
+    
+    
     if (valdiar.length==0) {
       try{
         await pedido.destroy();
@@ -248,12 +255,6 @@ async function crearPedido(req, res) {
       }
       
     }
-
-    const carritoEliminar = carrito.map(async (carr) => {
-      carr.destroy();
-    });
-
-    const eliminar = await Promise.all(carritoEliminar);
 
     return res.json(respuesta);
   }
