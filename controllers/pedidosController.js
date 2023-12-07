@@ -237,9 +237,16 @@ async function crearPedido(req, res) {
     });
     console.log('calidar tiene= ' + valdiar);
     if (valdiar.length==0) {
-      await pedido.destroy();
-      console.error('Error al crear el pedido:', error);
-      return res.json({ error: 'No hay productos en el carrito' });
+      try{
+        await pedido.destroy();
+        console.error('Error al crear el pedido:');
+        return res.json({'error': 'No hay productos en el carrito' });
+      }catch(error){
+        await pedido.destroy();
+        console.error('Error al crear el pedido:', error);
+        return res.json({ 'error': 'No hay productos en el carrito' });
+      }
+      
     }
 
     const carritoEliminar = carrito.map(async (carr) => {
