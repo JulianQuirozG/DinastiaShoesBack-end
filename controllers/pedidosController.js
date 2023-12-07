@@ -229,7 +229,8 @@ async function crearPedido(req, res) {
     });
 
     const respuesta = await Promise.all(carritoDetalle);
-    if ((!respuesta[0]) || (respuesta.length < 1)) {
+   
+    if ((respuesta[0]==null)) {
       await pedido.destroy();
       console.error('Error al crear el pedido:', error);
       return res.status(500).json({ error: 'No hay productos en el carrito' });
