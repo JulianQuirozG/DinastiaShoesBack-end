@@ -229,11 +229,10 @@ async function crearPedido(req, res) {
     });
 
     const respuesta = await Promise.all(carritoDetalle);
-
-    if ((!respuesta) || (respuesta.length < 1)) {
-      pedido.destroy();
+    if ((!respuesta[0]) || (respuesta.length < 1)) {
+      await pedido.destroy();
       console.error('Error al crear el pedido:', error);
-      res.status(500).json({ error: 'No hay productos en el carrito' });
+      return res.status(500).json({ error: 'No hay productos en el carrito' });
     }
 
     const carritoEliminar = carrito.map(async (carr) => {
