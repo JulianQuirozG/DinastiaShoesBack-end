@@ -21,6 +21,6 @@ const Empleado = sequelize.define('empleado', {
   }
   );
 
-  Empleado.sync();
+  //Empleado.sync();
 
   module.exports = Empleado;

@@ -14,14 +14,5 @@ const sequelize  = new Sequelize(
 
 // console.log("Procesando manos",sequelize);
 // Verifica la conexión a la base de datos
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Conexión a la base de datos exitosa');
-  } catch (error) {
-    console.error('Error en la conexión a la base de datos:', error);
-  }
-})();
-
 module.exports = sequelize;
 

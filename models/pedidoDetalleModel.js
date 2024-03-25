@@ -22,6 +22,6 @@ const PedidoDetalle = sequelize.define('pedido_detalle', {
   );
 
 
-  PedidoDetalle.sync();
+  //PedidoDetalle.sync();
 
   module.exports = PedidoDetalle;

@@ -22,6 +22,6 @@ const Foto = sequelize.define('foto', {
   }
   );
   
-  Foto.sync();
+  //Foto.sync();
 
   module.exports = Foto;

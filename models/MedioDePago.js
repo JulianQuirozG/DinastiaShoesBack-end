@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
 const Pedido = require('./pedidoModel');
 
+
 const MedioPago = sequelize.define('mediopago', {
     id: {
       type: DataTypes.INTEGER,
@@ -35,8 +36,8 @@ const MedioPago = sequelize.define('mediopago', {
   }
   );
   
-  MedioPago.hasMany(Pedido, { foreignKey: 'mediopago_id' });
+ MedioPago.hasMany(Pedido, { foreignKey: 'mediopago_id' });
 
-  MedioPago.sync();
+  //MedioPago.sync();
 
   module.exports = MedioPago;

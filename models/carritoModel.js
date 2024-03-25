@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
 const CarritoDetalle = require('./carritoDetalleModel');
 
+
 const Carrito = sequelize.define('carrito', {
     id: {
       type: DataTypes.INTEGER,
@@ -20,6 +21,6 @@ const Carrito = sequelize.define('carrito', {
   );
 
   Carrito.hasMany(CarritoDetalle, { foreignKey: 'carrito_id' });
-  Carrito.sync();
+  //Carrito.sync();
 
   module.exports = Carrito;

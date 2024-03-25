@@ -1,4 +1,3 @@
-const Producto = require('../models/productoModel'); // Importa el modelo de usuario
 const Inventario = require('../models/inventarioModel');
 const Foto = require('../models/fotoModel');
 const { async } = require('@firebase/util');

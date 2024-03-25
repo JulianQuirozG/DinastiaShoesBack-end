@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
-const Foto = require('./fotoModel');
 const Inventario = require('./inventarioModel');
+
 
 const Producto = sequelize.define('producto', {
   codigo: {
@@ -38,6 +38,6 @@ const Producto = sequelize.define('producto', {
 Producto.hasMany(Inventario, { foreignKey: 'producto_codigo' });
 //Inventario.hasMany(Foto, { foreignKey: 'inventario_codigo' });
 
-Producto.sync();
+//Producto.sync();
 
 module.exports = Producto;

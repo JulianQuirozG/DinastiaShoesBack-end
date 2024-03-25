@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Importa la conexión a la base de datos
 const PedidoDetalle = require('./pedidoDetalleModel');
 
+
 const Pedido = sequelize.define('pedido', {
     id: {
       type: DataTypes.INTEGER,
@@ -44,6 +45,6 @@ const Pedido = sequelize.define('pedido', {
   );
 
   Pedido.hasMany(PedidoDetalle, { foreignKey: 'pedido_id' });
-  Pedido.sync();
+  //Pedido.sync();
 
   module.exports = Pedido;

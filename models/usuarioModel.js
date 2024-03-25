@@ -3,6 +3,7 @@ const sequelize = require('../config/database'); // Importa la conexión a la ba
 const Cliente = require('./clienteModel');
 const Empleado = require('./empleadoModel');
 
+
 const Usuario = sequelize.define('usuario', {
     cedula: {
       type: DataTypes.STRING,
@@ -44,5 +45,5 @@ const Usuario = sequelize.define('usuario', {
   );
   Usuario.hasMany(Cliente, { foreignKey: 'cedula' });
   Usuario.hasMany(Empleado, { foreignKey: 'cedula' });
-  Usuario.sync();
+  //Usuario.sync();
   module.exports = Usuario;
