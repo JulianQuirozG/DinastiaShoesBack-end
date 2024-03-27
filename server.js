@@ -8,7 +8,7 @@ const app = express();
 (async () => {
     try {
       await sequelize.authenticate();
-      await sequelize.sync();
+      await sequelize.sync({ alter: true });
       console.log('Conexión a la base de datos exitosa');
     } catch (error) {
       console.error('Error en la conexión a la base de datos:', error);

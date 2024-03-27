@@ -32,7 +32,8 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
             logo: url_logo,
             qr: url_qr,
             color: color,
-            info: info
+            info: info,
+            eliminado: "0"
         });
 
         return res.json({ success: true, medioDePago });
@@ -47,7 +48,11 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
 
 async function obtenerLinkImagenes(req, res) {
     try {
-        const medioPago = await MedioDePago.findAll();
+        const medioPago = await MedioDePago.findAll({
+            where:{
+                eliminado:"0"
+            }
+        });
         res.json(medioPago);
     } catch (error) {
         console.error('Error al obtener la información medio de pago:', error);
@@ -84,7 +89,8 @@ async function eliminarImagenes(req, res) {
             }
 
             // Elimina el producto de la base de datos
-            await medio.destroy();
+            medio.eliminado="1";
+            await medio.save();
             res.json({ mensaje: 'Imagenes eliminada exitosamente' });
 
             
@@ -137,6 +143,7 @@ const updateToFirebaseAndSaveLink = async (req, res) => {
         medio.qr = url_qr;
         medio.color = color;
         medio.info = info;
+        medio.eliminado="0";
 
         await medio.save();
         return res.json({ success: true, medio });

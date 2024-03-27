@@ -29,6 +29,9 @@ const MedioPago = sequelize.define('mediopago', {
     info: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    eliminado:{
+      type: DataTypes.CHAR
     }
   },{
     tableName:'mediopago',

@@ -37,6 +37,9 @@ const Inventario = sequelize.define('inventario', {
   producto_codigo: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  eliminado:{
+    type: DataTypes.CHAR
   }
 }, {
   tableName: 'inventario',

@@ -29,7 +29,10 @@ const Cliente = sequelize.define('cliente', {
     telefono: {
         type: DataTypes.STRING,
         allowNull: false,
-      }
+    },
+    eliminado:{
+      type: DataTypes.CHAR
+    }
   },{
     tableName:'cliente',
     timestamps: false,
