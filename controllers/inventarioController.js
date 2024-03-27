@@ -11,7 +11,10 @@ async function obtenerInventarioProductos(req, res) {
                     model: Foto,
                     attributes: ['codigo', 'url_foto', 'inventario_codigo'],
                 }
-            ]
+            ],
+            where:{
+                eliminado:"0"
+            }
         });
 
         res.json(inventario);
@@ -55,7 +58,8 @@ async function crearInventarioProducto(req, res) {
             color,
             precio,
             descuento,
-            producto_codigo
+            producto_codigo,
+            eliminado:"0"
         });
 
         res.json(nuevoInventarioProducto);
@@ -83,7 +87,8 @@ async function eliminarInventarioProductoPorId(req, res) {
             });
         }
         if (productoInv) {
-            await productoInv.destroy(); // Elimina el producto de la base de datos
+            productoInv.eliminado="1"
+            await productoInv.save(); // Elimina el producto de la base de datos
             res.json({ mensaje: 'Producto eliminado exitosamente' });
         } else {
             res.status(404).json({ error: 'Producto no encontrado' });
@@ -110,7 +115,7 @@ async function actualizarProductoPorId(req, res) {
             producto.color = color;
             producto.precio = precio;
             producto.descuento = descuento;
-
+            producto.eliminado="0";
             await producto.save(); // Guarda los cambios en la base de datos
             res.json(producto);
         } else {
@@ -129,8 +134,10 @@ async function obtenerVariantesdeProductodelInventario(req, res) {
     try {
         const producto = await Inventario.findAll({
             where: {
+                eliminado:"0",
                 color: color,
                 producto_codigo: codigo,
+                
 
             },
             include: [
