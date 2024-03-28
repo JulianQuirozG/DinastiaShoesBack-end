@@ -7,9 +7,12 @@ async function obtenerClientes(req, res) {
     try {
         const client = await Usuario.findAll({
             // attributes: { exclude: ['createdAt', 'updatedAt'] }
-            include:[{
+            include: [{
                 model: Cliente,
-            },]
+                where: {
+                    eliminado: "0",
+                }
+            }]
         });
         res.json(client);
     } catch (error) {
@@ -22,9 +25,9 @@ async function obtenerClientes(req, res) {
 async function obtenerUnCliente(req, res) {
     const { cedula } = req.params;
     try {
-        const client = await Usuario.findByPk(cedula,{
+        const client = await Usuario.findByPk(cedula, {
             // attributes: { exclude: ['createdAt', 'updatedAt'] }
-            include:[{
+            include: [{
                 model: Cliente,
             },]
         });
@@ -50,11 +53,12 @@ async function crearCliente(req, res) {
                 municipio,
                 direccion_completa,
                 informacion_complementaria,
-                telefono
+                telefono,
+                eliminado: "0"
             });
 
             const carrito = await Carrito.create({
-                cliente_cedula:cedula,
+                cliente_cedula: cedula,
             });
 
             res.json(nuevoClient);
@@ -77,7 +81,8 @@ async function eliminarClientePorId(req, res) {
         const client = await Cliente.findByPk(cedula);
         //console.log(cliente);
         if (client) {
-            await client.destroy(); // Elimina el producto de la base de datos
+            client.eliminado = "1"
+            await client.save(); // Elimina el producto de la base de datos
             res.json({ mensaje: 'Informacion del cliente eliminada exitosamente' });
         } else {
             res.status(404).json({ error: 'Cliente no encontrado' });
@@ -104,6 +109,7 @@ async function actualizarClientePorId(req, res) {
             client.direccion_completa = direccion_completa;
             client.informacion_complementaria = informacion_complementaria;
             client.telefono = telefono;
+            client.eliminado = "0";
 
             await client.save(); // Guarda los cambios en la base de datos
             res.json(client);

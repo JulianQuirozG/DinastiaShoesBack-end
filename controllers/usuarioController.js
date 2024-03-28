@@ -23,6 +23,9 @@ async function obtenerClientes(req, res) {
             include: [
                 {
                     model: Cliente,
+                    where:{
+                        eliminado:"0",
+                    }
                 },
             ]
         });
@@ -84,13 +87,32 @@ async function crearUsuarioCliente(req, res) {
     const { cedula, nombres, apellidos, correo, contrasen, sexo, fecha_nacimiento } = req.body;
     const tipo = "C";
     try {
-        // Crea un nuevo usuario en la base de datos
+        
+        const cliente = findByPk(cedula);
+        if(cliente.eliminado=="0"){
+            return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
+        }
+        
+        
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
-        if (regex.test(contrasen)) {
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
+        
+        if(cliente.eliminado=="1"){
+            cliente.nombres=nombres,
+            cliente.apellidos=apellidos,
+            cliente.correo=correo,
+            cliente.contrasenia= hashedPassword,
+            cliente.sexo=sexo,
+            cliente.fecha_nacimiento=fecha_nacimiento,
+            cliente.tipo=tipo,
+            await cliente.save();
+            return res.json(cliente);
+        }
 
-            const saltRounds = 10;
-            // Genera el hash de la contraseña
-            const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
+        // Crea un nuevo usuario en la base de datos
+        
+        if (regex.test(contrasen)) {
 
             const user = await Usuario.create({
                 cedula,
@@ -103,10 +125,10 @@ async function crearUsuarioCliente(req, res) {
                 tipo
             });
 
-            res.json(user);
+            return res.json(user);
 
         } else {
-            res.status(404).json({ error: 'Contraseña no valida' });
+            return res.status(404).json({ error: 'Contraseña no valida' });
         }
     } catch (error) {
         console.error('Error al crear el usuario:', error);
