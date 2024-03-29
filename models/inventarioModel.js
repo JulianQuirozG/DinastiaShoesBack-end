@@ -49,7 +49,7 @@ const Inventario = sequelize.define('inventario', {
   indexes: [
     {
       unique: true,
-      fields: ['nombre', 'correo']
+      fields: ['nombre', 'correo','producto_codigo']
     }
   ]
 }
