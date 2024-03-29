@@ -10,6 +10,9 @@ async function obtenerProductos(req, res) {
       include: [
         {
           model: Inventario,
+          where: {
+            eliminado: "0",
+          },
           include: [
             {
               model: Foto
@@ -42,7 +45,7 @@ async function obtenerTallasColoresCategorias(req, res) {
     });
 
     const categorias = await Categoria.findAll({
-      attributes: ['id','nombre'],
+      attributes: ['id', 'nombre'],
       group: ['nombre'],
     });
 
@@ -77,10 +80,11 @@ async function obtenerFiltradoTallaColor(req, res) {
             where: {
               color: col,
               talla: tal,
+              eliminado: "0",
             },
-            include:[
+            include: [
               {
-                model:Foto,
+                model: Foto,
               }
             ]
           }
@@ -94,13 +98,14 @@ async function obtenerFiltradoTallaColor(req, res) {
             model: Inventario,
             where: {
               color: col,
+              eliminado: "0",
             },
-            include:[
+            include: [
               {
-                model:Foto,
+                model: Foto,
               }
             ]
-            
+
           }
         ]
       });
@@ -112,10 +117,11 @@ async function obtenerFiltradoTallaColor(req, res) {
             model: Inventario,
             where: {
               talla: tal,
+              eliminado: "0",
             },
-            include:[
+            include: [
               {
-                model:Foto,
+                model: Foto,
               }
             ]
           }
@@ -127,9 +133,12 @@ async function obtenerFiltradoTallaColor(req, res) {
         include: [
           {
             model: Inventario,
-            include:[
+            where: {
+              eliminado: "0",
+            },
+            include: [
               {
-                model:Foto,
+                model: Foto,
               }
             ]
           }
@@ -152,6 +161,9 @@ async function obtenerUnProducto(req, res) {
       include: [
         {
           model: Inventario,
+          where: {
+            eliminado: "0",
+          },
           include: [
             {
               model: Foto
@@ -193,11 +205,12 @@ async function crearProducto(req, res) {
 //ELIMINAR UN PRODUCTO
 async function eliminarProductoPorId(req, res) {
   const { codigo } = req.params;
-  await console.log("codigo: ", codigo);
+  //await console.log("codigo: ", codigo);
   try {
     const producto = await Producto.findByPk(codigo);
-    console.log(producto);
+    //console.log(producto);
     if (producto) {
+
       await producto.destroy(); // Elimina el producto de la base de datos
       res.json({ mensaje: 'Producto eliminado exitosamente' });
     } else {
@@ -246,6 +259,9 @@ async function obtenerProductoFiltrado(req, res) {
       include: [
         {
           model: Inventario,
+          where: {
+            eliminado: "0",
+          },
           include: [
             {
               model: Foto
