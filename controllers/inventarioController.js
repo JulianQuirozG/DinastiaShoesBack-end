@@ -66,7 +66,7 @@ async function crearInventarioProducto(req, res) {
 
             inventario.save();
 
-            return res.json({nuevoInventarioProducto: inventario});
+            return res.json(inventario);
         }
 
 
@@ -82,7 +82,7 @@ async function crearInventarioProducto(req, res) {
             eliminado: "0"
         });
 
-        return res.json({nuevoInventarioProducto: nuevoInventarioProducto});
+        return res.json(nuevoInventarioProducto);
     } catch (error) {
         console.error('Error al crear el producto:', error);
         res.status(500).json({ error: 'Error al crear el producto' });
