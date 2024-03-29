@@ -44,12 +44,10 @@ const Inventario = sequelize.define('inventario', {
 }, {
   tableName: 'inventario',
   timestamps: false,
-}, {
-  // Esto define una restricción de unicidad compuesta para nombre y correo
   indexes: [
     {
       unique: true,
-      fields: ['nombre', 'correo','producto_codigo']
+      fields: ['talla', 'color','producto_codigo']
     }
   ]
 }
