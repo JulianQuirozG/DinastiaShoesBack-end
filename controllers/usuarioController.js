@@ -55,16 +55,36 @@ async function obtenerEmpleados(req, res) {
 //Listar Usuarios Filtrados
 async function obtenerUsuarioFiltrado(req, res) {
     const { filtro } = req.params;
+    
+    if(filtro=="C"){
+        try {
+            const user = await Usuario.findAll({
+                include:[
+                    {
+                        model: Cliente,
+                        where:{
+                            eliminado:"0",
+                        }
+                    },
+                ]
+            });
+            return res.json(user);
+        } catch (error) {
+            console.error('Error al obtener usuario:', error);
+            return res.status(500).json({ error: 'Error al obtener usuario' });
+        }
+    }
+
     try {
         const user = await Usuario.findAll({
             where: {
                 tipo: filtro
             }
         });
-        res.json(user);
+        return res.json(user);
     } catch (error) {
         console.error('Error al obtener usuario:', error);
-        res.status(500).json({ error: 'Error al obtener usuario' });
+        return res.status(500).json({ error: 'Error al obtener usuario' });
     }
 }
 
@@ -220,7 +240,8 @@ async function eliminarUsuarioPorId(req, res) {
         //console.log(cliente);
         if (user) {
             if (emp) {
-                await emp.destroy();
+                emp.eliminado="1";
+                await emp.save();
             }
             if (cli) {
                 await cli.destroy();
