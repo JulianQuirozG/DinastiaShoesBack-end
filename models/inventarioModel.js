@@ -19,12 +19,12 @@ const Inventario = sequelize.define('inventario', {
   talla: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+
   },
   color: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+
   },
   precio: {
     type: DataTypes.INTEGER,
@@ -44,6 +44,14 @@ const Inventario = sequelize.define('inventario', {
 }, {
   tableName: 'inventario',
   timestamps: false,
+}, {
+  // Esto define una restricción de unicidad compuesta para nombre y correo
+  indexes: [
+    {
+      unique: true,
+      fields: ['nombre', 'correo']
+    }
+  ]
 }
 );
 

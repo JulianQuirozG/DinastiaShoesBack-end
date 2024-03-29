@@ -45,6 +45,18 @@ async function crearCliente(req, res) {
     try {
 
         const user = await Usuario.findByPk(cedula);
+        const emp = await Cliente.findByPk(cedula);
+
+        if(emp){
+            emp.departamento=departamento;
+            emp.municipio=municipio;
+            emp.direccion_completa=direccion_completa;
+            emp.informacion_complementaria=informacion_complementaria;
+            emp.telefono=telefono;
+            emp.eliminado = "0";
+            emp.save();
+            return  res.json(emp);
+        }
 
         if (user.tipo == "C") {
             const nuevoClient = await Cliente.create({
@@ -61,7 +73,7 @@ async function crearCliente(req, res) {
                 cliente_cedula: cedula,
             });
 
-            res.json(nuevoClient);
+            return res.json(nuevoClient);
         } else {
             res.status(500).json({ error: 'El usuario no es de tipo cliente' });
         }

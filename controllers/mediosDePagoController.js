@@ -26,6 +26,25 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
             console.error('Debes agregar una imagen para el QR');
             return res.status(400).json({ error: 'Debes agregar una imagen para el QR' });
         }
+        //Si ya existia un medio de pago con el mismo nombre simplemente se reemplazan los campos sino se crea
+        const medioAnterior = await MedioDePago.findOne({
+            where:{
+                nombre:nombre
+            }
+        });
+
+        if(medioAnterior){
+            medioAnterior.logo=url_logo;
+            medioAnterior.qr=url_qr;
+            medioAnterior.color=color;
+            medioAnterior.info=info;
+            medioAnterior.eliminado="0";
+
+            medioAnterior.save();
+            return res.json({ success: true,medioDePago: medioAnterior });
+        }
+
+
 
         const medioDePago = await MedioDePago.create({
             nombre: nombre,
@@ -36,7 +55,7 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
             eliminado: "0"
         });
 
-        return res.json({ success: true, medioDePago });
+        return res.json({ success: true,medioDePago: medioDePago });
 
     }
     catch (error) {
@@ -82,10 +101,10 @@ async function eliminarImagenes(req, res) {
 
         if (medio) {
             if(medio.logo){
-                const { respuesta: resQr, error: errorQr } = await deleteFile(medio.logo);
+            //    const { respuesta: resQr, error: errorQr } = await deleteFile(medio.logo);
             } 
             if(medio.qr){
-                const { respuesta: resLogo, error: errorLogo } = await deleteFile(medio.qr);
+            //    const { respuesta: resLogo, error: errorLogo } = await deleteFile(medio.qr);
             }
 
             // Elimina el producto de la base de datos

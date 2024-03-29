@@ -12,8 +12,8 @@ async function obtenerInventarioProductos(req, res) {
                     attributes: ['codigo', 'url_foto', 'inventario_codigo'],
                 }
             ],
-            where:{
-                eliminado:"0"
+            where: {
+                eliminado: "0"
             }
         });
 
@@ -51,6 +51,26 @@ async function crearInventarioProducto(req, res) {
     const { cantidad, talla, color, precio, descuento, producto_codigo } = req.body;
 
     try {
+        const inventario = await Inventario.findOne({
+            where:{
+                talla:talla,
+                color:color,
+                producto_codigo:producto_codigo,
+            }
+        });
+        if (inventario) {
+            inventario.cantidad=cantidad;
+            inventario.precio=precio;
+            inventario.descuento=descuento;
+            inventario.eliminado= "0";
+
+            inventario.save();
+
+            return res.json({nuevoInventarioProducto: inventario});
+        }
+
+
+
         // Crea un nuevo producto en la base de datos
         const nuevoInventarioProducto = await Inventario.create({
             cantidad,
@@ -59,10 +79,10 @@ async function crearInventarioProducto(req, res) {
             precio,
             descuento,
             producto_codigo,
-            eliminado:"0"
+            eliminado: "0"
         });
 
-        res.json(nuevoInventarioProducto);
+        return res.json({nuevoInventarioProducto: nuevoInventarioProducto});
     } catch (error) {
         console.error('Error al crear el producto:', error);
         res.status(500).json({ error: 'Error al crear el producto' });
@@ -80,14 +100,14 @@ async function eliminarInventarioProductoPorId(req, res) {
                 inventario_codigo: codigo,
             },
         });
-        
+
         if (fotos.length > 0) {
-            fotos.map(async (fo)=>{
+            fotos.map(async (fo) => {
                 fo.destroy();
             });
         }
         if (productoInv) {
-            productoInv.eliminado="1"
+            productoInv.eliminado = "1"
             await productoInv.save(); // Elimina el producto de la base de datos
             res.json({ mensaje: 'Producto eliminado exitosamente' });
         } else {
@@ -115,7 +135,7 @@ async function actualizarProductoPorId(req, res) {
             producto.color = color;
             producto.precio = precio;
             producto.descuento = descuento;
-            producto.eliminado="0";
+            producto.eliminado = "0";
             await producto.save(); // Guarda los cambios en la base de datos
             res.json(producto);
         } else {
@@ -134,10 +154,10 @@ async function obtenerVariantesdeProductodelInventario(req, res) {
     try {
         const producto = await Inventario.findAll({
             where: {
-                eliminado:"0",
+                eliminado: "0",
                 color: color,
                 producto_codigo: codigo,
-                
+
 
             },
             include: [
