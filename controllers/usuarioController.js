@@ -108,7 +108,7 @@ async function crearUsuarioCliente(req, res) {
     const tipo = "C";
     try {
         
-        const cliente = findByPk(cedula);
+        const cliente = await Cliente.findByPk(cedula);
         if(cliente.eliminado=="0"){
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
@@ -126,6 +126,7 @@ async function crearUsuarioCliente(req, res) {
             cliente.sexo=sexo,
             cliente.fecha_nacimiento=fecha_nacimiento,
             cliente.tipo=tipo,
+            cliente.eliminado="0",
             await cliente.save();
             return res.json(cliente);
         }
@@ -142,7 +143,8 @@ async function crearUsuarioCliente(req, res) {
                 contrasenia: hashedPassword,
                 sexo,
                 fecha_nacimiento,
-                tipo
+                tipo,
+                eliminado:"0"
             });
 
             return res.json(user);
@@ -240,13 +242,13 @@ async function eliminarUsuarioPorId(req, res) {
         //console.log(cliente);
         if (user) {
             if (emp) {
-                emp.eliminado="1";
-                await emp.save();
+                await emp.destroy();
             }
             if (cli) {
-                await cli.destroy();
+                cli.eliminado="1";
+                await cli.save();
             }
-            await user.destroy(); // Elimina el usuario de la base de datos
+            //await user.destroy(); // Elimina el usuario de la base de datos
             res.json({ mensaje: 'usuario eliminado exitosamente' });
         } else {
             res.status(404).json({ error: 'usuario no encontrado' });
