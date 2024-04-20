@@ -301,7 +301,7 @@ async function login(req, res) {
         if(user && user.tipo=="C"){
             const cliente = await Cliente.findByPk(user.cedula)
             if(cliente.eliminado=="1"){
-                res.status(404).json({ error: 'usuario no encontrado' });
+                return res.status(404).json({ error: 'usuario no encontrado' });
             }
         }
         if (user && user) {
@@ -317,18 +317,18 @@ async function login(req, res) {
                 const token = jwt.sign(payload, process.env.JWT_PASS, { expiresIn: '1h' });
 
                 //res.json(passwordsMatch);
-                res.status(200).send({ token: token, usuario: user });
+                return res.status(200).send({ token: token, usuario: user });
 
             } else {
-                res.status(401).json({ error: 'La clave es incorrecta' });
+                return res.status(401).json({ error: 'La clave es incorrecta' });
             }
 
         } else {
-            res.status(404).json({ error: 'usuario no encontrado' });
+            return res.status(404).json({ error: 'usuario no encontrado' });
         }
     } catch (error) {
         console.error('Error al autenticar el usuario:', error);
-        res.status(500).json({ error: 'Error al autenticar el usuario1' });
+        return res.status(500).json({ error: 'Error al autenticar el usuario1' });
     }
 }
 
