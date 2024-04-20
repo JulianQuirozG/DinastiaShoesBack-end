@@ -109,7 +109,7 @@ async function crearUsuarioCliente(req, res) {
     try {
         
         const cliente = await Cliente.findByPk(cedula);
-        if(cliente.eliminado=="0"){
+        if(cliente && cliente.eliminado=="0"){
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
         
@@ -118,7 +118,7 @@ async function crearUsuarioCliente(req, res) {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
         
-        if(cliente.eliminado=="1"){
+        if(cliente && cliente.eliminado=="1"){
             cliente.nombres=nombres,
             cliente.apellidos=apellidos,
             cliente.correo=correo,
@@ -237,8 +237,8 @@ async function eliminarUsuarioPorId(req, res) {
     //await console.log("codigo: ", cedula);
     try {
         const user = await Usuario.findByPk(cedula);
-        const emp = await Cliente.findByPk(cedula);
-        const cli = await Empleado.findByPk(cedula);
+        const cli = await Cliente.findByPk(cedula);
+        const emp = await Empleado.findByPk(cedula);
         //console.log(cliente);
         if (user) {
             if (emp) {
