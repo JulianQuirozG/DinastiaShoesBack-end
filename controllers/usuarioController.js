@@ -242,12 +242,13 @@ async function eliminarUsuarioPorId(req, res) {
         if (user) {
             if (emp) {
                 await emp.destroy();
+                await user.destroy();
             }
             if (cli) {
                 cli.eliminado="1";
                 await cli.save();
             }
-            //await user.destroy(); // Elimina el usuario de la base de datos
+            // // Elimina el usuario de la base de datos
             res.json({ mensaje: 'usuario eliminado exitosamente' });
         } else {
             res.status(404).json({ error: 'usuario no encontrado' });
@@ -297,9 +298,14 @@ async function login(req, res) {
             },
         });
 
+        if(user.tipo=="C"){
+            const cliente = await Cliente.findByPk(user.cedula)
+            if(cliente.eliminado=="1"){
+                res.status(404).json({ error: 'usuario no encontrado' });
+            }
+        }
         if (user) {
             const passwordsMatch = await bcrypt.compare(password, user.contrasenia);
-
             if (passwordsMatch) {
 
                 const payload = {
@@ -308,8 +314,6 @@ async function login(req, res) {
                     tipo: user.tipo,
                     correo: user.correo,
                 };
-
-
                 const token = jwt.sign(payload, process.env.JWT_PASS, { expiresIn: '1h' });
 
                 //res.json(passwordsMatch);
