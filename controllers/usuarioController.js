@@ -242,14 +242,17 @@ async function eliminarUsuarioPorId(req, res) {
         if (user) {
             if (emp) {
                 await emp.destroy();
+            }
+            if(user.tipo=="E"){
                 await user.destroy();
+                return res.json({ mensaje: 'Empleado eliminado exitosamente' });
             }
             if (cli) {
                 cli.eliminado="1";
                 await cli.save();
             }
             // // Elimina el usuario de la base de datos
-            res.json({ mensaje: 'usuario eliminado exitosamente' });
+            return res.json({ mensaje: 'usuario eliminado exitosamente' });
         } else {
             res.status(404).json({ error: 'usuario no encontrado' });
         }
