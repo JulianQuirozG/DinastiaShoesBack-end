@@ -236,8 +236,8 @@ async function eliminarUsuarioPorId(req, res) {
     //await console.log("codigo: ", cedula);
     try {
         const user = await Usuario.findByPk(cedula);
-        const emp = await Cliente.findByPk(cedula);
-        const cli = await Empleado.findByPk(cedula);
+        const cli = await Cliente.findByPk(cedula);
+        const emp = await Empleado.findByPk(cedula);
         //console.log(cliente);
         if (user) {
             if (emp) {
@@ -340,7 +340,7 @@ async function enviarCorreoContrasenia(req, res) {
         const token = jwt.sign(payload, process.env.JWT_PASS, { expiresIn: '15m' });
 
         const asunto = 'Recuperar contraseña DinastiaShoes';
-        const cuerpo = `Haz click en el siguiente link para poder reestablecer tu contraseña: http://35.190.142.105:3000/recovery/reset/?token=${token}`;
+        const cuerpo = `Haz click en el siguiente link para poder reestablecer tu contraseña: http://35.185.46.237:3000/recovery/reset/?token=${token}`;
 
         const mailOptions = {
             from: 'dinastiashoesoficial@hotmail.com',
