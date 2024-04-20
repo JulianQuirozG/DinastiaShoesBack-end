@@ -298,13 +298,13 @@ async function login(req, res) {
             },
         });
 
-        if(user.tipo=="C"){
+        if(user && user.tipo=="C"){
             const cliente = await Cliente.findByPk(user.cedula)
             if(cliente.eliminado=="1"){
                 res.status(404).json({ error: 'usuario no encontrado' });
             }
         }
-        if (user) {
+        if (user && user) {
             const passwordsMatch = await bcrypt.compare(password, user.contrasenia);
             if (passwordsMatch) {
 
