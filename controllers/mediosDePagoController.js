@@ -60,7 +60,7 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
     }
     catch (error) {
         console.error('Error en la carga de la imagen:', error);
-        res.status(500).json({ error: 'Error en la carga de la imagen' });
+        return res.status(500).json({ error: 'Error en la carga de la imagen' });
     }
 
 };
@@ -72,10 +72,10 @@ async function obtenerLinkImagenes(req, res) {
                 eliminado:"0"
             }
         });
-        res.json(medioPago);
+        return res.json(medioPago);
     } catch (error) {
         console.error('Error al obtener la información medio de pago:', error);
-        res.status(500).json({ error: 'Error al obtener la información medio de pago.' });
+        return res.status(500).json({ error: 'Error al obtener la información medio de pago.' });
     }
 }
 
@@ -87,10 +87,10 @@ async function obtenerLinkImagenesById(req, res) {
                 id: id
             }
         });
-        res.json(medioPago);
+        return res.json(medioPago);
     } catch (error) {
         console.error('Error al obtener la información medio de pago:', error);
-        res.status(500).json({ error: 'Error al obtener la información medio de pago.' });
+        return res.status(500).json({ error: 'Error al obtener la información medio de pago.' });
     }
 }
 
@@ -110,15 +110,15 @@ async function eliminarImagenes(req, res) {
             // Elimina el producto de la base de datos
             medio.eliminado="1";
             await medio.save();
-            res.json({ mensaje: 'Imagenes eliminada exitosamente' });
+            return res.json({ mensaje: 'Imagenes eliminada exitosamente' });
 
             
         } else {
-            res.status(404).json({ error: 'Imagen no encontrada' });
+            return res.status(404).json({ error: 'Imagen no encontrada' });
         }
     } catch (error) {
         console.error('Error al eliminar la imagen:', error);
-        res.status(500).json({ error: 'Error al eliminar la imagen' });
+        return res.status(500).json({ error: 'Error al eliminar la imagen' });
     }
 }
 
@@ -170,7 +170,7 @@ const updateToFirebaseAndSaveLink = async (req, res) => {
     }
     catch (error) {
         console.error('Error en la carga de la imagen:', error);
-        res.status(500).json({ error: 'Error en la carga de la imagen' });
+        return res.status(500).json({ error: 'Error en la carga de la imagen' });
     }
 
 };

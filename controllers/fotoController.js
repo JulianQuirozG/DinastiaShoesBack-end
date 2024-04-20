@@ -47,12 +47,12 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
 
         } else {
             console.error('Debes agregar una imagen');
-            res.status(500).json({ error: 'Error al agregar una imagen' });
+            return res.status(500).json({ error: 'Error al agregar una imagen' });
         }
     }
     catch (error) {
         console.error('Error en la carga de la imagen:', error);
-        res.status(500).json({ error: 'Error en la carga de la imagen' });
+        return res.status(500).json({ error: 'Error en la carga de la imagen' });
     }
 
 };
@@ -60,10 +60,10 @@ const uploadToFirebaseAndSaveLink = async (req, res) => {
 async function obtenerLinkImagenes(req, res) {
     try {
         const foto = await Foto.findAll();
-        res.json(foto);
+        return res.json(foto);
     } catch (error) {
         console.error('Error al obtener informacion las imagenes:', error);
-        res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+        return res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
     }
 }
 
@@ -73,10 +73,10 @@ async function obtenerLinkImagenesHome(req, res) {
             order: Sequelize.literal('RAND()'), // Ordenar aleatoriamente
             limit: 8,
         });
-        res.json(foto);
+        return res.json(foto);
     } catch (error) {
         console.error('Error al obtener informacion las imagenes:', error);
-        res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+        return res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
     }
 }
 
@@ -88,10 +88,10 @@ async function obtenerLinkImagenesById(req, res) {
                 inventario_codigo: producto
             }
         });
-        res.json(foto);
+        return res.json(foto);
     } catch (error) {
         console.error('Error al obtener informacion las imagenes:', error);
-        res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+        return res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
     }
 }
 
@@ -119,10 +119,10 @@ async function obtenerLinkImagenesByIdProducto(req, res) {
             }));
         }
 
-        res.json(traerImagenes);
+        return res.json(traerImagenes);
     } catch (error) {
         console.error('Error al obtener informacion las imagenes:', error);
-        res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
+        return res.status(500).json({ error: 'Error al obtener la informacion las imagenes.' });
     }
 }
 
@@ -136,16 +136,16 @@ async function eliminarImagenes(req, res) {
 
             if (respuesta) {
                 await foto.destroy(); // Elimina el producto de la base de datos
-                res.json({ mensaje: 'Imagen eliminada exitosamente' });
+                return res.json({ mensaje: 'Imagen eliminada exitosamente' });
             } else {
-                res.status(500).json({ error: 'Error al eliminar la imagen', detalle: error });
+                return res.status(500).json({ error: 'Error al eliminar la imagen', detalle: error });
             }
         } else {
-            res.status(404).json({ error: 'Imagen no encontrada' });
+            return res.status(404).json({ error: 'Imagen no encontrada' });
         }
     } catch (error) {
         console.error('Error al eliminar la imagen:', error);
-        res.status(500).json({ error: 'Error al eliminar la imagen' });
+        return res.status(500).json({ error: 'Error al eliminar la imagen' });
     }
 }
 

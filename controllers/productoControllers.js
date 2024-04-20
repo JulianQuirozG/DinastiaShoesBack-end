@@ -23,11 +23,11 @@ async function obtenerProductos(req, res) {
       ]
     });
 
-    res.json(producto);
+    return res.json(producto);
 
   } catch (error) {
     console.error('Error al obtener productos:', error);
-    res.status(500).json({ error: 'Error al obtener productos' });
+    return res.status(500).json({ error: 'Error al obtener productos' });
   }
 }
 
@@ -49,11 +49,11 @@ async function obtenerTallasColoresCategorias(req, res) {
       group: ['nombre'],
     });
 
-    res.json({ colores, tallas, categorias });
+    return res.json({ colores, tallas, categorias });
 
   } catch (error) {
     console.error('Error al obtener productos:', error);
-    res.status(500).json({ error: 'Error al obtener productos' });
+    return res.status(500).json({ error: 'Error al obtener productos' });
   }
 }
 
@@ -149,7 +149,7 @@ async function obtenerFiltradoTallaColor(req, res) {
 
   } catch (error) {
     console.error('Error al obtener productos:', error);
-    res.status(500).json({ error: 'Error al obtener productos' });
+    return res.status(500).json({ error: 'Error al obtener productos' });
   }
 }
 
@@ -173,10 +173,10 @@ async function obtenerUnProducto(req, res) {
       ]
     });
 
-    res.json(producto);
+    return res.json(producto);
   } catch (error) {
     console.error('Error al obtener productos:', error);
-    res.status(500).json({ error: 'Error al obtener productos' });
+    return res.status(500).json({ error: 'Error al obtener productos' });
   }
 }
 
@@ -195,10 +195,10 @@ async function crearProducto(req, res) {
       categoria_id
     });
 
-    res.json(nuevoProducto);
+    return res.json(nuevoProducto);
   } catch (error) {
     console.error('Error al crear el producto:', error);
-    res.status(500).json({ error: 'Error al crear el producto' });
+    return res.status(500).json({ error: 'Error al crear el producto' });
   }
 }
 
@@ -212,13 +212,13 @@ async function eliminarProductoPorId(req, res) {
     if (producto) {
 
       await producto.destroy(); // Elimina el producto de la base de datos
-      res.json({ mensaje: 'Producto eliminado exitosamente' });
+      return res.json({ mensaje: 'Producto eliminado exitosamente' });
     } else {
-      res.status(404).json({ error: 'Producto no encontrado' });
+      return res.status(404).json({ error: 'Producto no encontrado' });
     }
   } catch (error) {
     console.error('Error al eliminar el producto:', error);
-    res.status(500).json({ error: 'Error al eliminar el producto' });
+    return res.status(500).json({ error: 'Error al eliminar el producto' });
   }
 }
 
@@ -239,13 +239,13 @@ async function actualizarProductoPorId(req, res) {
       producto.categoria_id = categoria_id;
 
       await producto.save(); // Guarda los cambios en la base de datos
-      res.json(producto);
+      return res.json(producto);
     } else {
-      res.status(404).json({ error: 'Producto no encontrado' });
+      return res.status(404).json({ error: 'Producto no encontrado' });
     }
   } catch (error) {
     console.error('Error al actualizar el producto:', error);
-    res.status(500).json({ error: 'Error al actualizar el producto' });
+    return res.status(500).json({ error: 'Error al actualizar el producto' });
   }
 }
 
@@ -272,10 +272,10 @@ async function obtenerProductoFiltrado(req, res) {
       ]
 
     });
-    res.json(catego);
+    return res.json(catego);
   } catch (error) {
     console.error('Error al obtener Producto filtrada:', error);
-    res.status(500).json({ error: 'Error al obtener Producto filtrada' });
+    return res.status(500).json({ error: 'Error al obtener Producto filtrada' });
   }
 }
 

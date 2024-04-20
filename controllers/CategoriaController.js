@@ -4,10 +4,10 @@ const Categoria = require('../models/categoriaModel'); // Importa el modelo de u
 async function obtenerCategoria(req, res) {
     try {
         const catego = await Categoria.findAll();
-        res.json(catego);
+        return res.json(catego);
     } catch (error) {
         console.error('Error al obtener Categoria:', error);
-        res.status(500).json({ error: 'Error al obtener Categoria' });
+        return res.status(500).json({ error: 'Error al obtener Categoria' });
     }
 }
 
@@ -18,14 +18,14 @@ async function obtenerUnaCategoria(req, res) {
         const catego = await Categoria.findByPk(id);
 
         if (catego) {
-            res.json(catego);
+            return res.json(catego);
         } else {
-            res.status(404).json({ error: 'No se encontró la categoria' });
+            return res.status(404).json({ error: 'No se encontró la categoria' });
         }
 
     } catch (error) {
         console.error('Error al obtener Categoria:', error);
-        res.status(500).json({ error: 'Error al obtener Categoria' });
+        return res.status(500).json({ error: 'Error al obtener Categoria' });
     }
 }
 
@@ -41,15 +41,15 @@ async function crearCategoria(req, res) {
                 destacado,
             });
 
-            res.json(nuevaCatego);
+            return res.json(nuevaCatego);
         } else {
-            res.status(500).json({ error: 'Los campos Están incompletos' });
+            return res.status(500).json({ error: 'Los campos Están incompletos' });
         }
         // Crea una nueva categoria
 
     } catch (error) {
         console.error('Error al guardar la categoria:', error);
-        res.status(500).json({ error: 'Error al guardar la informacion de la categoria' });
+        return res.status(500).json({ error: 'Error al guardar la informacion de la categoria' });
     }
 }
 
@@ -62,13 +62,13 @@ async function eliminarCategoriaPorId(req, res) {
 
         if (catego) {
             await catego.destroy(); // Elimina el producto de la base de datos
-            res.json({ mensaje: 'Informacion de la categoria eliminada exitosamente' });
+            return res.json({ mensaje: 'Informacion de la categoria eliminada exitosamente' });
         } else {
-            res.status(404).json({ error: 'Categoria no encontrada' });
+            return res.status(404).json({ error: 'Categoria no encontrada' });
         }
     } catch (error) {
         console.error('Error al eliminar la informacion de la categoria:', error);
-        res.status(500).json({ error: 'Error al eliminar la Informacion de la categoria' });
+        return res.status(500).json({ error: 'Error al eliminar la Informacion de la categoria' });
     }
 }
 
@@ -87,13 +87,13 @@ async function actualizarCategoriaPorId(req, res) {
             catego.destacado = destacado;
 
             await catego.save(); // Guarda los cambios en la base de datos
-            res.json(catego);
+            return res.json(catego);
         } else {
-            res.status(404).json({ error: 'Categoria no encontrada' });
+            return res.status(404).json({ error: 'Categoria no encontrada' });
         }
     } catch (error) {
         console.error('Error al actualizar la categoria:', error);
-        res.status(500).json({ error: 'Error al actualizar la categoria' });
+        return res.status(500).json({ error: 'Error al actualizar la categoria' });
     }
 }
 
@@ -105,10 +105,10 @@ async function obtenerCategoriaFiltrada(req, res) {
                 destacado: categoria,
             }
         });
-        res.json(catego);
+        return res.json(catego);
     } catch (error) {
         console.error('Error al obtener Categoria filtrada:', error);
-        res.status(500).json({ error: 'Error al obtener Categoria filtrada' });
+        return res.status(500).json({ error: 'Error al obtener Categoria filtrada' });
     }
 }
 

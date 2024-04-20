@@ -9,10 +9,10 @@ async function obtenerEmpleados(req, res) {
                 model: Empleado,
             }]
         });
-        res.json(emple);
+        return res.json(emple);
     } catch (error) {
         console.error('Error al obtener informacion de los empleados:', error);
-        res.status(500).json({ error: 'Error al obtener la informacion de los empleados.' });
+        return res.status(500).json({ error: 'Error al obtener la informacion de los empleados.' });
     }
 }
 
@@ -25,10 +25,10 @@ async function obtenerUnEmpleado(req, res) {
                 model: Empleado,
             }]
         });
-        res.json(emple);
+        return res.json(emple);
     } catch (error) {
         console.error('Error al obtener Empleado', error);
-        res.status(500).json({ error: 'Error al obtener Empleado' });
+        return res.status(500).json({ error: 'Error al obtener Empleado' });
     }
 }
 
@@ -46,15 +46,15 @@ async function crearEmpleado(req, res) {
                 ventas
             });
 
-            res.json(nuevoEmple);
+            return res.json(nuevoEmple);
         } else {
-            res.status(500).json({ error: 'El usuario no es de tipo Empleado' });
+            return res.status(500).json({ error: 'El usuario no es de tipo Empleado' });
         }
         // Crea un nuevo Empleado en la base de datos
 
     } catch (error) {
         console.error('Error al guardar la informacion del Empleado:', error);
-        res.status(500).json({ error: 'Error al guardar la informacion del Empleado' });
+        return res.status(500).json({ error: 'Error al guardar la informacion del Empleado' });
     }
 }
 
@@ -65,13 +65,13 @@ async function eliminarEmpleadoPorId(req, res) {
         const emple = await Empleado.findByPk(cedula);
         if (emple) {
             await emple.destroy(); // Elimina el info de un empleado de la base de datos
-            res.json({ mensaje: 'Informacion del empleado eliminada exitosamente' });
+            return res.json({ mensaje: 'Informacion del empleado eliminada exitosamente' });
         } else {
-            res.status(404).json({ error: 'empleado no encontrado' });
+            return res.status(404).json({ error: 'empleado no encontrado' });
         }
     } catch (error) {
         console.error('Error al eliminar la informacion del empleado:', error);
-        res.status(500).json({ error: 'Error al eliminar la Informacion del empleado' });
+        return res.status(500).json({ error: 'Error al eliminar la Informacion del empleado' });
     }
 }
 
@@ -89,13 +89,13 @@ async function actualizarEmpleadoPorId(req, res) {
             emple.ventas = ventas;
 
             await emple.save(); // Guarda los cambios en la base de datos
-            res.json(emple);
+            return res.json(emple);
         } else {
-            res.status(404).json({ error: 'info del empleado no encontrado' });
+            return res.status(404).json({ error: 'info del empleado no encontrado' });
         }
     } catch (error) {
         console.error('Error al actualizar la info del empleado:', error);
-        res.status(500).json({ error: 'Error al actualizar la info del empleado' });
+        return res.status(500).json({ error: 'Error al actualizar la info del empleado' });
     }
 }
 

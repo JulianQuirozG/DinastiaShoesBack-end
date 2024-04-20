@@ -35,11 +35,11 @@ async function obtenerPedido(req, res) {
 
     const respuesta = await Promise.all(anexarMedioPago);
 
-    res.json(respuesta);
+    return res.json(respuesta);
 
   } catch (error) {
     console.error('Error al obtener pedido:', error);
-    res.status(500).json({ error: 'Error al obtener el pedido' });
+    return res.status(500).json({ error: 'Error al obtener el pedido' });
   }
 }
 
@@ -92,7 +92,7 @@ async function obtenerUnPedido(req, res) {
 
   } catch (error) {
     console.error('Error al obtener pedido:', error);
-    res.status(500).json({ error: 'Error al obtener el pedido' });
+    return res.status(500).json({ error: 'Error al obtener el pedido' });
   }
 }
 
@@ -154,7 +154,7 @@ async function obtenerPedidosPorUsuario(req, res) {
 
   } catch (error) {
     console.error('Error al obtener pedido:', error);
-    res.status(500).json({ error: 'Error al obtener el pedido' });
+    return res.status(500).json({ error: 'Error al obtener el pedido' });
   }
 }
 

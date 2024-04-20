@@ -34,11 +34,11 @@ async function obtenerCarrito(req, res) {
       ]
     });
 
-    res.json(carritoDetalle);
+    return res.json(carritoDetalle);
 
   } catch (error) {
     console.error('Error al obtener carrito:', error);
-    res.status(500).json({ error: 'Error al obtener el carrito' });
+    return res.status(500).json({ error: 'Error al obtener el carrito' });
   }
 }
 
@@ -101,7 +101,7 @@ async function crearCarritoYagregarProducto(req, res) {
     }
   } catch (error) {
     console.error('Error al agregar el producto al carrito:', error);
-    res.status(500).json({ error: 'Error al agregar el producto al carrito' });
+    return res.status(500).json({ error: 'Error al agregar el producto al carrito' });
   }
 }
 
@@ -125,7 +125,7 @@ async function eliminarInventariodelCarritoPorId(req, res) {
     }
   } catch (error) {
     console.error('Error al eliminar el producto:', error);
-    res.status(500).json({ error: 'Error al eliminar el producto' });
+    return res.status(500).json({ error: 'Error al eliminar el producto' });
   }
 }
 
@@ -150,7 +150,7 @@ async function eliminarTodosInventariodelCarrito(req, res) {
     }
   } catch (error) {
     console.error('Error al eliminar el producto:', error);
-    res.status(500).json({ error: 'Error al eliminar el producto' });
+    return res.status(500).json({ error: 'Error al eliminar el producto' });
   }
 }
 
@@ -170,13 +170,13 @@ async function actualizarProductoPorId(req, res) {
       producto.categoria_id = categoria_id;
 
       await producto.save(); // Guarda los cambios en la base de datos
-      res.json(producto);
+      return res.json(producto);
     } else {
-      res.status(404).json({ error: 'Producto no encontrado' });
+      return res.status(404).json({ error: 'Producto no encontrado' });
     }
   } catch (error) {
     console.error('Error al actualizar el producto:', error);
-    res.status(500).json({ error: 'Error al actualizar el producto' });
+    return res.status(500).json({ error: 'Error al actualizar el producto' });
   }
 }
 
@@ -200,10 +200,10 @@ async function obtenerProductoFiltrado(req, res) {
       ]
 
     });
-    res.json(catego);
+    return res.json(catego);
   } catch (error) {
     console.error('Error al obtener Producto filtrada:', error);
-    res.status(500).json({ error: 'Error al obtener Producto filtrada' });
+    return res.status(500).json({ error: 'Error al obtener Producto filtrada' });
   }
 }
 

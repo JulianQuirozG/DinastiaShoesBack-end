@@ -14,10 +14,10 @@ async function obtenerClientes(req, res) {
                 }
             }]
         });
-        res.json(client);
+        return res.json(client);
     } catch (error) {
         console.error('Error al obtener productos:', error);
-        res.status(500).json({ error: 'Error al obtener productos' });
+        return res.status(500).json({ error: 'Error al obtener productos' });
     }
 }
 
@@ -31,10 +31,10 @@ async function obtenerUnCliente(req, res) {
                 model: Cliente,
             },]
         });
-        res.json(client);
+        return res.json(client);
     } catch (error) {
         console.error('Error al obtener productos:', error);
-        res.status(500).json({ error: 'Error al obtener productos' });
+        return res.status(500).json({ error: 'Error al obtener productos' });
     }
 }
 
@@ -75,13 +75,13 @@ async function crearCliente(req, res) {
 
             return res.json(nuevoClient);
         } else {
-            res.status(500).json({ error: 'El usuario no es de tipo cliente' });
+            return res.status(500).json({ error: 'El usuario no es de tipo cliente' });
         }
         // Crea un nuevo cliente en la base de datos
 
     } catch (error) {
         console.error('Error al guardar la informacion del cliente:', error);
-        res.status(500).json({ error: 'Error al guardar la informacion del cliente' });
+        return res.status(500).json({ error: 'Error al guardar la informacion del cliente' });
     }
 }
 
@@ -95,13 +95,13 @@ async function eliminarClientePorId(req, res) {
         if (client) {
             client.eliminado = "1"
             await client.save(); // Elimina el producto de la base de datos
-            res.json({ mensaje: 'Informacion del cliente eliminada exitosamente' });
+            return res.json({ mensaje: 'Informacion del cliente eliminada exitosamente' });
         } else {
-            res.status(404).json({ error: 'Cliente no encontrado' });
+            return res.status(404).json({ error: 'Cliente no encontrado' });
         }
     } catch (error) {
         console.error('Error al eliminar la informacion del cliente:', error);
-        res.status(500).json({ error: 'Error al eliminar la Informacion del cliente' });
+        return res.status(500).json({ error: 'Error al eliminar la Informacion del cliente' });
     }
 }
 
@@ -124,13 +124,13 @@ async function actualizarClientePorId(req, res) {
             client.eliminado = "0";
 
             await client.save(); // Guarda los cambios en la base de datos
-            res.json(client);
+            return res.json(client);
         } else {
-            res.status(404).json({ error: 'Producto no encontrado' });
+            return res.status(404).json({ error: 'Producto no encontrado' });
         }
     } catch (error) {
         console.error('Error al actualizar el producto:', error);
-        res.status(500).json({ error: 'Error al actualizar el producto' });
+        return res.status(500).json({ error: 'Error al actualizar el producto' });
     }
 }
 

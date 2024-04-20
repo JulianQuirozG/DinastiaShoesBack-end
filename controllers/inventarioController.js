@@ -17,11 +17,11 @@ async function obtenerInventarioProductos(req, res) {
             }
         });
 
-        res.json(inventario);
+        return res.json(inventario);
 
     } catch (error) {
         console.error('Error al obtener productos:', error);
-        res.status(500).json({ error: 'Error al obtener productos' });
+        return res.status(500).json({ error: 'Error al obtener productos' });
     }
 }
 
@@ -38,10 +38,10 @@ async function obtenerUnProductodelInventario(req, res) {
             ]
         });
 
-        res.json(producto);
+        return res.json(producto);
     } catch (error) {
         console.error('Error al obtener productos:', error);
-        res.status(500).json({ error: 'Error al obtener productos' });
+        return res.status(500).json({ error: 'Error al obtener productos' });
     }
 }
 
@@ -85,7 +85,7 @@ async function crearInventarioProducto(req, res) {
         return res.json(nuevoInventarioProducto);
     } catch (error) {
         console.error('Error al crear el producto:', error);
-        res.status(500).json({ error: 'Error al crear el producto' });
+        return res.status(500).json({ error: 'Error al crear el producto' });
     }
 }
 
@@ -109,13 +109,13 @@ async function eliminarInventarioProductoPorId(req, res) {
         if (productoInv) {
             productoInv.eliminado = "1"
             await productoInv.save(); // Elimina el producto de la base de datos
-            res.json({ mensaje: 'Producto eliminado exitosamente' });
+            return res.json({ mensaje: 'Producto eliminado exitosamente' });
         } else {
-            res.status(404).json({ error: 'Producto no encontrado' });
+            return res.status(404).json({ error: 'Producto no encontrado' });
         }
     } catch (error) {
         console.error('Error al eliminar el producto:', error);
-        res.status(500).json({ error: 'Error al eliminar el producto' });
+        return res.status(500).json({ error: 'Error al eliminar el producto' });
     }
 }
 
@@ -137,13 +137,13 @@ async function actualizarProductoPorId(req, res) {
             producto.descuento = descuento;
             producto.eliminado = "0";
             await producto.save(); // Guarda los cambios en la base de datos
-            res.json(producto);
+            return res.json(producto);
         } else {
-            res.status(404).json({ error: 'Producto no encontrado' });
+            return res.status(404).json({ error: 'Producto no encontrado' });
         }
     } catch (error) {
         console.error('Error al actualizar el producto:', error);
-        res.status(500).json({ error: 'Error al actualizar el producto' });
+        return res.status(500).json({ error: 'Error al actualizar el producto' });
     }
 }
 
@@ -167,10 +167,10 @@ async function obtenerVariantesdeProductodelInventario(req, res) {
             ]
         });
 
-        res.json(producto);
+        return res.json(producto);
     } catch (error) {
         console.error('Error al obtener productos:', error);
-        res.status(500).json({ error: 'Error al obtener productos' });
+        return res.status(500).json({ error: 'Error al obtener productos' });
     }
 }
 

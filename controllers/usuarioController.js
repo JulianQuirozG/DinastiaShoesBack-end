@@ -356,10 +356,10 @@ async function enviarCorreoContrasenia(req, res) {
         const info = await transporter.sendMail(mailOptions);
 
         console.log('Correo enviado:', info.response);
-        res.status(200).json({ mensaje: 'Correo enviado exitosamente' });
+        return res.status(200).json({ mensaje: 'Correo enviado exitosamente' });
     } catch (error) {
         console.error('Error al enviar el correo:', error);
-        res.status(500).json({ error: 'Error al enviar el correo' });
+        return res.status(500).json({ error: 'Error al enviar el correo' });
     }
 }
 
@@ -382,10 +382,10 @@ async function enviarCorreoContactanos(req, res) {
         const info = await transporter.sendMail(mailOptions);
 
         console.log('Correo enviado:', info.response);
-        res.status(200).json({ mensaje: 'Correo enviado exitosamente' });
+        return res.status(200).json({ mensaje: 'Correo enviado exitosamente' });
     } catch (error) {
         console.error('Error al enviar el correo:', error);
-        res.status(500).json({ error: 'Error al enviar el correo' });
+        return res.status(500).json({ error: 'Error al enviar el correo' });
     }
 }
 
@@ -398,7 +398,7 @@ async function olvidarContraUsuario(req, res) {
         const decoded = jwt.verify(token, process.env.JWT_PASS);
         if (!decoded) {
             console.error('Error en la sesion', error);
-            res.status(500).json({ error: 'Error en la sesion' });
+            return res.status(500).json({ error: 'Error en la sesion' });
         }
 
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
@@ -418,19 +418,19 @@ async function olvidarContraUsuario(req, res) {
                 user.contrasenia = hashedPassword;
 
                 await user.save(); // Guarda los cambios en la base de datos
-                res.json(user);
+                return res.json(user);
 
             } else {
-                res.status(404).json({ error: 'usuario no encontrado' });
+                return res.status(404).json({ error: 'usuario no encontrado' });
             }
 
         } else {
-            res.status(404).json({ error: 'Contraseña no valida' });
+            return res.status(404).json({ error: 'Contraseña no valida' });
         }
 
     } catch (error) {
         console.error('Error al cambiar la contraseña:', error);
-        res.status(500).json({ error: 'Error al cambiar la contraseña' });
+        return res.status(500).json({ error: 'Error al cambiar la contraseña' });
     }
 }
 
@@ -464,10 +464,10 @@ async function cambiarContraUsuario(req, res) {
         user.contrasenia = hashedPassword;
 
         await user.save(); // Guarda los cambios en la base de datos
-        res.json(user);
+        return res.json(user);
     } catch (error) {
         console.error('Error al autenticar el usuario:', error);
-        res.status(500).json({ error: 'Error al autenticar el usuario' });
+        return res.status(500).json({ error: 'Error al autenticar el usuario' });
     }
 }
 
@@ -478,7 +478,7 @@ async function obtenerUnUsuarioPorToken(req, res) {
         const decoded = jwt.verify(token, process.env.JWT_PASS);
         if (!decoded) {
             console.error('Error en la sesion', error);
-            res.status(500).json({ error: 'Error en la sesion' });
+            return res.status(500).json({ error: 'Error en la sesion' });
         }
         const user = await Usuario.findOne({
             where: {
@@ -486,10 +486,10 @@ async function obtenerUnUsuarioPorToken(req, res) {
             },
             //attributes: { exclude: ['createdAt', 'updatedAt'] }
         });
-        res.json(user);
+        return res.json(user);
     } catch (error) {
         console.error('Error al obtener usuario:', error);
-        res.status(500).json({ error: 'Error al obtener usuario' });
+        return res.status(500).json({ error: 'Error al obtener usuario' });
     }
 }
 
