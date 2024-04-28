@@ -162,7 +162,7 @@ async function obtenerPedidosPorUsuario(req, res) {
 //CREAR UN CARRITO
 async function crearPedido(req, res) {
   try {
-    const { id, fecha, cliente_cedula, mediodepago } = req.body;
+    const { id, cliente_cedula, mediodepago } = req.body;
     const { comprobar } = req.files;
 
     const carrito = await CarritoDetalle.findAll({

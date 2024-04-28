@@ -109,7 +109,13 @@ async function crearUsuarioCliente(req, res) {
     try {
         
         const cliente = await Cliente.findByPk(cedula);
-        if(cliente && cliente.eliminado=="0"){
+        const usuar = await Usuario.findOne({
+            where: {
+                correo: correo
+            }
+        });
+
+        if((cliente && cliente.eliminado=="0") || (usuar)){
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
         
@@ -153,7 +159,7 @@ async function crearUsuarioCliente(req, res) {
         }
     } catch (error) {
         console.error('Error al crear el usuario:', error);
-        res.status(500).json({ error: 'Error al crear el usuario' });
+        return res.status(500).json({ error: 'Error al crear el usuario' });
     }
 }
 
@@ -162,6 +168,18 @@ async function crearUsuarioEmpleado(req, res) {
     const { cedula, nombres, apellidos, correo, contrasen, sexo, fecha_nacimiento } = req.body;
     const tipo = "E";
     try {
+
+        const usuar = await Usuario.findOne({
+            where: {
+                correo: correo
+            }
+        });
+
+        if(usuar){
+            return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
+        }
+
+
         // Crea un nuevo usuario en la base de datos
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
         if (regex.test(contrasen)) {
@@ -181,15 +199,15 @@ async function crearUsuarioEmpleado(req, res) {
                 tipo,
             });
 
-            res.json(user);
+            return res.json(user);
 
         } else {
-            res.status(404).json({ error: 'Contraseña no valida' });
+            return res.status(404).json({ error: 'Contraseña no valida' });
         }
 
     } catch (error) {
         console.error('Error al crear el usuario:', error);
-        res.status(500).json({ error: 'Error al crear el usuario' });
+        return res.status(500).json({ error: 'Error al crear el usuario' });
     }
 }
 
@@ -198,6 +216,17 @@ async function crearUsuarioAdmin(req, res) {
     const { cedula, nombres, apellidos, correo, contrasen, sexo, fecha_nacimiento } = req.body;
     const tipo = "A";
     try {
+
+        const usuar = await Usuario.findOne({
+            where: {
+                correo: correo
+            }
+        });
+
+        if(usuar){
+            return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
+        }
+
         // Crea un nuevo usuario en la base de datos
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
         if (regex.test(contrasen)) {

@@ -21,6 +21,7 @@ const Usuario = sequelize.define('usuario', {
     correo: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     contrasenia: {
       type: DataTypes.STRING,
@@ -31,7 +32,7 @@ const Usuario = sequelize.define('usuario', {
       allowNull: false,
     },
     fecha_nacimiento: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     tipo: {
