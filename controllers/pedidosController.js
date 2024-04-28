@@ -195,7 +195,6 @@ async function crearPedido(req, res) {
     const pedido = await Pedido.create({
       direccion: clienteinfo.direccion_completa,
       informacion_complementaria: clienteinfo.informacion_complementaria,
-      fecha: fecha,
       estado: 'P',
       cliente_cedula: cliente_cedula,
       comprobante: url,
