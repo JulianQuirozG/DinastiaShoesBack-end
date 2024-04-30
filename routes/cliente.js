@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const router = express.Router();
 const clienteController = require('../controllers/clienteController');
+const protegerRuta = require('../middleware/preteccionRutas')
 
 const app= express()
 

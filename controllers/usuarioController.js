@@ -115,7 +115,7 @@ async function crearUsuarioCliente(req, res) {
             }
         });
 
-        if((cliente && cliente.eliminado=="0") || (usuar)){
+        if((cliente && cliente.eliminado=="0") || (usuar && (usuar.cedula!=cliente.cedula)) || (usuar && usuar.tipo!='C')){
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
         
@@ -332,7 +332,7 @@ async function login(req, res) {
 
         if(user && user.tipo=="C"){
             const cliente = await Cliente.findByPk(user.cedula)
-            if(cliente.eliminado=="1"){
+            if(cliente && cliente.eliminado=="1"){
                 return res.status(404).json({ error: 'usuario no encontrado' });
             }
         }
