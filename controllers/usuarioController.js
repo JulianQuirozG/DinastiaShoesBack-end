@@ -1,6 +1,7 @@
 const Usuario = require('../models/usuarioModel'); // Importa el modelo de usuario
 const Cliente = require('../models/clienteModel'); // Importa el modelo de usuario
 const Empleado = require('../models/empleadoModel'); // Importa el modelo de usuario
+const { fechaParse } = require("../util/parseFecha")
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { transporter } = require('../config/nodemailer');
@@ -23,8 +24,8 @@ async function obtenerClientes(req, res) {
             include: [
                 {
                     model: Cliente,
-                    where:{
-                        eliminado:"0",
+                    where: {
+                        eliminado: "0",
                     }
                 },
             ]
@@ -55,15 +56,15 @@ async function obtenerEmpleados(req, res) {
 //Listar Usuarios Filtrados
 async function obtenerUsuarioFiltrado(req, res) {
     const { filtro } = req.params;
-    
-    if(filtro=="C"){
+
+    if (filtro == "C") {
         try {
             const user = await Usuario.findAll({
-                include:[
+                include: [
                     {
                         model: Cliente,
-                        where:{
-                            eliminado:"0",
+                        where: {
+                            eliminado: "0",
                         }
                     },
                 ]
@@ -107,7 +108,6 @@ async function crearUsuarioCliente(req, res) {
     const { cedula, nombres, apellidos, correo, contrasen, sexo, fecha_nacimiento } = req.body;
     const tipo = "C";
     try {
-        
         const cliente = await Cliente.findByPk(cedula);
         const usuar = await Usuario.findOne({
             where: {
@@ -115,30 +115,30 @@ async function crearUsuarioCliente(req, res) {
             }
         });
 
-        if((cliente && cliente.eliminado=="0") || (usuar && (usuar.cedula!=cliente.cedula)) || (usuar && usuar.tipo!='C')){
+        if ((cliente && cliente.eliminado == "0") || (usuar && (usuar.cedula != cliente.cedula)) || (usuar && usuar.tipo != 'C')) {
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
-        
-        
+
+
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
-        
-        if(cliente && cliente.eliminado=="1"){
-            cliente.nombres=nombres,
-            cliente.apellidos=apellidos,
-            cliente.correo=correo,
-            cliente.contrasenia= hashedPassword,
-            cliente.sexo=sexo,
-            cliente.fecha_nacimiento=fecha_nacimiento,
-            cliente.tipo=tipo,
-            cliente.eliminado="0",
-            await cliente.save();
+
+        if (cliente && cliente.eliminado == "1") {
+            cliente.nombres = nombres,
+                cliente.apellidos = apellidos,
+                cliente.correo = correo,
+                cliente.contrasenia = hashedPassword,
+                cliente.sexo = sexo,
+                cliente.fecha_nacimiento = fecha_nacimiento,
+                cliente.tipo = tipo,
+                cliente.eliminado = "0",
+                await cliente.save();
             return res.json(cliente);
         }
 
         // Crea un nuevo usuario en la base de datos
-        
+
         if (regex.test(contrasen)) {
 
             const user = await Usuario.create({
@@ -175,9 +175,10 @@ async function crearUsuarioEmpleado(req, res) {
             }
         });
 
-        if(usuar){
+        if (usuar) {
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
+        const fechaFinal=(await fechaParse(fecha_nacimiento));
 
 
         // Crea un nuevo usuario en la base de datos
@@ -195,7 +196,7 @@ async function crearUsuarioEmpleado(req, res) {
                 correo,
                 contrasenia: hashedPassword,
                 sexo,
-                fecha_nacimiento,
+                fecha_nacimiento: fechaFinal,
                 tipo,
             });
 
@@ -223,7 +224,7 @@ async function crearUsuarioAdmin(req, res) {
             }
         });
 
-        if(usuar){
+        if (usuar) {
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
 
@@ -272,12 +273,12 @@ async function eliminarUsuarioPorId(req, res) {
             if (emp) {
                 await emp.destroy();
             }
-            if(user.tipo=="E"){
+            if (user.tipo == "E") {
                 await user.destroy();
                 return res.json({ mensaje: 'Empleado eliminado exitosamente' });
             }
             if (cli) {
-                cli.eliminado="1";
+                cli.eliminado = "1";
                 await cli.save();
             }
             // // Elimina el usuario de la base de datos
@@ -330,9 +331,9 @@ async function login(req, res) {
             },
         });
 
-        if(user && user.tipo=="C"){
+        if (user && user.tipo == "C") {
             const cliente = await Cliente.findByPk(user.cedula)
-            if(cliente && cliente.eliminado=="1"){
+            if (cliente && cliente.eliminado == "1") {
                 return res.status(404).json({ error: 'usuario no encontrado' });
             }
         }
@@ -370,31 +371,31 @@ async function enviarCorreoContrasenia(req, res) {
         const { destinatario } = req.params;
 
         const usuar = await Usuario.findOne({
-            where : {
-                correo : destinatario
+            where: {
+                correo: destinatario
             }
         })
 
 
-        if(usuar==null){
+        if (usuar == null) {
             return res.status(500).json({ error: 'El usuaio no se ha registrado' });
-        }else{
-            if(usuar && usuar.tipo == "C"){
-                
+        } else {
+            if (usuar && usuar.tipo == "C") {
+
                 const client = await Cliente.findOne({
-                    where:{
-                        cedula : usuar.cedula
+                    where: {
+                        cedula: usuar.cedula
                     }
                 }
                 );
                 console.log(client)
-                if(client&&client.eliminado=="1"){
+                if (client && client.eliminado == "1") {
                     return res.status(500).json({ error: 'El usuaio no se ha registrado' });
                 }
             }
         }
-        
-        
+
+
 
         const payload = {
             correo: destinatario,
@@ -429,7 +430,7 @@ async function enviarCorreoContactanos(req, res) {
 
         const asunto = `Contacto a DinastiaShoes de ${destinatario}`;
 
-        const cuerpo = 'De: ' +nombre + ' ' + apellido + '\n' + 'Inquietud: ' + pregunta;
+        const cuerpo = 'De: ' + nombre + ' ' + apellido + '\n' + 'Inquietud: ' + pregunta;
 
         const mailOptions = {
             from: 'dinastiashoesoficial@hotmail.com',

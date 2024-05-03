@@ -7,10 +7,10 @@ const protegerRuta = require('../middleware/preteccionRutas')
 const app= express()
 
 // Rutas para Clientes
-router.get('/listar', clienteController.obtenerClientes);
-router.get('/obtener/:cedula', clienteController.obtenerUnCliente);
+router.get('/listar', protegerRuta(["A"]), clienteController.obtenerClientes);
+router.get('/obtener/:cedula', protegerRuta(["A","E"]), clienteController.obtenerUnCliente);
 router.put('/crearCliente/', clienteController.crearCliente);
-router.delete('/eliminar/:cedula', clienteController.eliminarClientePorId);
-router.patch('/actualizar/:cedula', clienteController.actualizarClientePorId);
+router.delete('/eliminar/:cedula', protegerRuta(["A","C"]), clienteController.eliminarClientePorId);
+router.patch('/actualizar/:cedula', protegerRuta(["A","C"]),clienteController.actualizarClientePorId);
 
 module.exports = router;
