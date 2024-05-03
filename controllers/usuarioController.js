@@ -369,6 +369,33 @@ async function enviarCorreoContrasenia(req, res) {
     try {
         const { destinatario } = req.params;
 
+        const usuar = await Usuario.findOne({
+            where : {
+                correo : destinatario
+            }
+        })
+
+
+        if(usuar==null){
+            return res.status(500).json({ error: 'El usuaio no se ha registrado' });
+        }else{
+            if(usuar && usuar.tipo == "C"){
+                
+                const client = await Cliente.findOne({
+                    where:{
+                        cedula : usuar.cedula
+                    }
+                }
+                );
+                console.log(client)
+                if(client&&client.eliminado=="1"){
+                    return res.status(500).json({ error: 'El usuaio no se ha registrado' });
+                }
+            }
+        }
+        
+        
+
         const payload = {
             correo: destinatario,
         };
