@@ -119,22 +119,22 @@ async function crearUsuarioCliente(req, res) {
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
 
-
+        const fechaFinal = (await fechaParse(fecha_nacimiento));
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
 
         if (cliente && cliente.eliminado == "1") {
-            cliente.nombres = nombres,
-                cliente.apellidos = apellidos,
-                cliente.correo = correo,
-                cliente.contrasenia = hashedPassword,
-                cliente.sexo = sexo,
-                cliente.fecha_nacimiento = fecha_nacimiento,
-                cliente.tipo = tipo,
-                cliente.eliminado = "0",
-                await cliente.save();
-            return res.json(cliente);
+            usuar.nombres = nombres,
+                usuar.apellidos = apellidos,
+                usuar.correo = correo,
+                usuar.contrasenia = hashedPassword,
+                usuar.sexo = sexo,
+                usuar.fecha_nacimiento = fechaFinal,
+                usuar.tipo = tipo,
+                usuar.eliminado = "0",
+                await usuar.save();
+            return res.json(usuar);
         }
 
         // Crea un nuevo usuario en la base de datos
@@ -148,7 +148,7 @@ async function crearUsuarioCliente(req, res) {
                 correo,
                 contrasenia: hashedPassword,
                 sexo,
-                fecha_nacimiento,
+                fecha_nacimiento: fechaFinal,
                 tipo
             });
 
@@ -178,7 +178,7 @@ async function crearUsuarioEmpleado(req, res) {
         if (usuar) {
             return res.status(404).json({ error: 'El usuario que intenta crear ya se encuentra registrado' });
         }
-        const fechaFinal=(await fechaParse(fecha_nacimiento));
+        const fechaFinal = (await fechaParse(fecha_nacimiento));
 
 
         // Crea un nuevo usuario en la base de datos
@@ -229,6 +229,7 @@ async function crearUsuarioAdmin(req, res) {
         }
 
         // Crea un nuevo usuario en la base de datos
+        const fechaFinal=(await fechaParse(fecha_nacimiento));
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
         if (regex.test(contrasen)) {
 
@@ -243,7 +244,7 @@ async function crearUsuarioAdmin(req, res) {
                 correo,
                 contrasenia: hashedPassword,
                 sexo,
-                fecha_nacimiento,
+                fecha_nacimiento:fechaFinal,
                 tipo,
             });
 
@@ -297,17 +298,17 @@ async function eliminarUsuarioPorId(req, res) {
 async function actualizarUsuarioPorId(req, res) {
     const { cedula } = req.params;
     const { nombres, apellidos, correo, contrasenia, sexo, fecha_nacimiento } = req.body;
-
+    
     try {
         const user = await Usuario.findByPk(cedula);
-
+        const fechaFinal=(await fechaParse(fecha_nacimiento));
         if (user) {
             // Actualiza los datos del cliente
             user.nombres = nombres;
             user.apellidos = apellidos;
             user.correo = correo;
             user.sexo = sexo;
-            user.fecha_nacimiento = fecha_nacimiento;
+            user.fecha_nacimiento = fechaFinal;
 
             await user.save(); // Guarda los cambios en la base de datos
             res.json(user);
