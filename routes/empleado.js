@@ -11,6 +11,6 @@ router.get('/listar', protegerRuta(["A"]), empleadoController.obtenerEmpleados);
 router.get('/obtener/:cedula', protegerRuta(["A","E"]), empleadoController.obtenerUnEmpleado);
 router.put('/crear', protegerRuta(["A"]), empleadoController.crearEmpleado);
 router.delete('/eliminar/:cedula', protegerRuta(["A"]), empleadoController.eliminarEmpleadoPorId);
-router.patch('/actualizar/:cedula', protegerRuta(["A"]), empleadoController.actualizarEmpleadoPorId);
+router.patch('/actualizar/:cedula', protegerRuta(["A","E"]), empleadoController.actualizarEmpleadoPorId);
 
 module.exports = router;

@@ -10,7 +10,7 @@ const app= express()
 // Rutas para usuarios
 router.get('/listar', usuarioController.obtenerUsuario);
 router.get('/listarFiltrado/:filtro', protegerRuta(["A","E"]), usuarioController.obtenerUsuarioFiltrado);
-router.get('/obtener/:cedula',protegerRuta(["A","E"]), usuarioController.obtenerUnUsuario);
+router.get('/obtener/:cedula',protegerRuta(["A","E","C"]), usuarioController.obtenerUnUsuario);
 
 router.get('/obtenerClientes',protegerRuta(["A","E"]), usuarioController.obtenerClientes);
 router.get('/obtenerEmpleados',protegerRuta(["A","E"]), usuarioController.obtenerEmpleados);
