@@ -8,7 +8,7 @@ const app= express()
 
 // Rutas para Clientes
 router.get('/listar', protegerRuta(["A"]), clienteController.obtenerClientes);
-router.get('/obtener/:cedula', protegerRuta(["A","E"]), clienteController.obtenerUnCliente);
+router.get('/obtener/:cedula', protegerRuta(["A","E","C"]), clienteController.obtenerUnCliente);
 router.put('/crearCliente/', clienteController.crearCliente);
 router.delete('/eliminar/:cedula', protegerRuta(["A","C"]), clienteController.eliminarClientePorId);
 router.patch('/actualizar/:cedula', protegerRuta(["A","C"]),clienteController.actualizarClientePorId);
