@@ -36,17 +36,17 @@ async function obtenerTallasColoresCategorias(req, res) {
   try {
     const colores = await Inventario.findAll({
       attributes: ['color'],
-      group: ['color'],
+      distinct: true
     });
 
     const tallas = await Inventario.findAll({
       attributes: ['talla'],
-      group: ['talla'],
+      distinct: true
     });
 
     const categorias = await Categoria.findAll({
       attributes: ['id', 'nombre'],
-      group: ['nombre'],
+      distinct: true
     });
 
     return res.json({ colores, tallas, categorias });
