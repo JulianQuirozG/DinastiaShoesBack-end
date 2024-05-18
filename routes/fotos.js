@@ -8,10 +8,10 @@ const protegerRuta = require('../middleware/preteccionRutas')
 const app = express()
 
 // Rutas para Clientes
-router.post('/subirImagen/:producto', upload.array('image', 5), fotoController.uploadToFirebaseAndSaveLink);
+router.post('/subirImagen/:producto', protegerRuta(["A","E"]), upload.array('image', 5), fotoController.uploadToFirebaseAndSaveLink);
 router.get('/listar', fotoController.obtenerLinkImagenes);
 router.get('/listar/:producto', fotoController.obtenerLinkImagenesById);
-router.delete('/eliminar/:id', protegerRuta(["A","E"]), fotoController.eliminarImagenes);
+router.delete('/eliminar/:id', fotoController.eliminarImagenes);
 router.get('/listaraleatorio',fotoController.obtenerLinkImagenesHome);
 router.get('/listarProducto/:producto', fotoController.obtenerLinkImagenesByIdProducto);
 module.exports = router;
