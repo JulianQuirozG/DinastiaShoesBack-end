@@ -1,4 +1,6 @@
+const { Fn } = require('sequelize/lib/utils');
 const Categoria = require('../models/categoriaModel'); // Importa el modelo de usuario
+const { Sequelize } = require('sequelize');
 
 //Listar Categoria
 async function obtenerCategoria(req, res) {
@@ -34,6 +36,15 @@ async function crearCategoria(req, res) {
     const { nombre, destacado } = req.body;
 
     try {
+        
+        const cate = await Categoria.count();
+
+        console.log(cate);
+
+        if(cate && (cate=>5)) {
+            console.log("La cantidad de categorias ya está en la maximo")
+            return res.status(500).json({ error: 'Los campos Están incompletos' });
+        }
 
         if (nombre && destacado) {
             const nuevaCatego = await Categoria.create({

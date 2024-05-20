@@ -455,26 +455,37 @@ async function olvidarContraUsuario(req, res) {
     const { contrasen, } = req.body;
     const { token } = req.params;
     try {
-
-        const decoded = jwt.verify(token, process.env.JWT_PASS);
-        if (!decoded) {
-            console.error('Error en la sesion', error);
-            return res.status(500).json({ error: 'Error en la sesion' });
+        let rest=Boolean(true);
+        let decoded1;
+        jwt.verify(token, process.env.JWT_PASS,(err,decoded)=>{
+            if (err) rest=Boolean(false);
+            decoded1=decoded;
+        });
+        console.log(decoded1);
+        if (!rest) {
+            console.error('El token no es valido', err);
+            return res.status(403).json({ error: 'Token inválido' });
         }
-
+        
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};:<>.,?~\\-]{8,}$/;
         if (regex.test(contrasen)) {
 
             const saltRounds = 10;
             // Genera el hash de la contraseña
             const hashedPassword = await bcrypt.hash(contrasen, saltRounds);
+            
             const user = await Usuario.findOne({
                 where: {
-                    correo: decoded.correo,
+                    correo: decoded1.correo,
                 },
             });
 
             if (user) {
+                if(user.tipo="C"){
+                    const cliente = await Cliente.findByPk(user.cedula);
+                    if(cliente && cliente.eliminado=="1") return res.status(404).json({ error: 'usuario no encontrado' });
+                }
+
                 // Actualiza los datos del cliente
                 user.contrasenia = hashedPassword;
 
