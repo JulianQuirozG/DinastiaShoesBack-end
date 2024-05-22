@@ -36,14 +36,18 @@ async function crearCategoria(req, res) {
     const { nombre, destacado } = req.body;
 
     try {
-        
-        const cate = await Categoria.count();
+
+        const cate = await Categoria.count({
+            where: {
+                destacado: "A"
+            }
+        });
 
         console.log(cate);
 
-        if(cate && (cate=>5)) {
-            console.log("La cantidad de categorias ya está en la maximo")
-            return res.status(500).json({ error: 'Los campos Están incompletos' });
+        if (cate && (cate => 5) && (destacado == "A")) {
+            console.log("¡La cantidad maxima de categorias destacadas es 5, no puedes destacar mas categorias!")
+            return res.status(500).json({ error: '¡La cantidad maxima de categorias destacadas es 5, no puedes destacar mas categorias!' });
         }
 
         if (nombre && destacado) {
@@ -90,10 +94,25 @@ async function actualizarCategoriaPorId(req, res) {
     const { nombre, destacado } = req.body;
 
     try {
+
         const catego = await Categoria.findByPk(id);
 
         if (catego) {
             // Actualiza los datos del cliente
+
+            const cate = await Categoria.count({
+                where: {
+                    destacado: "A"
+                }
+            });
+
+            console.log(cate);
+
+            if (cate && (cate => 5) && (destacado == "A")) {
+                console.log("¡La cantidad maxima de categorias destacadas es 5, no puedes destacar mas categorias!")
+                return res.status(500).json({ error: '¡La cantidad maxima de categorias destacadas es 5, no puedes destacar mas categorias!' });
+            }
+
             catego.nombre = nombre;
             catego.destacado = destacado;
 
