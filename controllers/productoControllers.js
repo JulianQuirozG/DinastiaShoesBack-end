@@ -2,7 +2,7 @@ const Producto = require('../models/productoModel'); // Importa el modelo de usu
 const Inventario = require('../models/inventarioModel');
 const Foto = require('../models/fotoModel');
 const Categoria = require('../models/categoriaModel');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 //LISTAR PRODUCTOS
 async function obtenerProductos(req, res) {
@@ -36,7 +36,9 @@ async function obtenerProductos(req, res) {
 async function obtenerTallasColoresCategorias(req, res) {
   try {
     const colores = await Inventario.findAll({
-      attributes: ['color'],
+      attributes: [
+        [Sequelize.fn('DISTINCT', Sequelize.col('color')), 'color']
+      ],
       distinct: true,
       where: {
         eliminado: "0",
@@ -47,7 +49,9 @@ async function obtenerTallasColoresCategorias(req, res) {
     });
 
     const tallas = await Inventario.findAll({
-      attributes: ['talla'],
+      attributes: [
+        [Sequelize.fn('DISTINCT', Sequelize.col('talla')), 'talla']
+      ],
       distinct: true,
       where: {
         eliminado: "0",
