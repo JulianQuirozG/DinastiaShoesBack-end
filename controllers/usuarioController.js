@@ -348,7 +348,7 @@ async function login(req, res) {
                     tipo: user.tipo,
                     correo: user.correo,
                 };
-                const token = jwt.sign(payload, process.env.JWT_PASS, { expiresIn: '1h' });
+                const token = jwt.sign(payload, process.env.JWT_PASS, { expiresIn: '10h' });
 
                 //res.json(passwordsMatch);
                 return res.status(200).send({ token: token, usuario: user });
