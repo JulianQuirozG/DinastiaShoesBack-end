@@ -20,7 +20,6 @@ const Pedido = sequelize.define('pedido', {
     fecha: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
     },
     estado: {
       type: DataTypes.CHAR,

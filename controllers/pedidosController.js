@@ -11,6 +11,7 @@ const { where } = require('sequelize');
 const MedioPago = require('../models/MedioDePago');
 const Usuario = require('../models/usuarioModel');
 const { async } = require('@firebase/util');
+const moment = require('moment-timezone');
 
 //LISTAR PRODUCTOS
 async function obtenerPedido(req, res) {
@@ -191,10 +192,12 @@ async function crearPedido(req, res) {
 
     const { ref: refLogo, downloadURL: downloadURLLogo } = await uploadFile(comprobar[0]);
     const url = downloadURLLogo;
-
+    const fechaActualBogota = moment().tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+    
     const pedido = await Pedido.create({
       direccion: clienteinfo.direccion_completa,
       informacion_complementaria: clienteinfo.informacion_complementaria,
+      fecha: fechaActualBogota,
       estado: 'P',
       cliente_cedula: cliente_cedula,
       comprobante: url,

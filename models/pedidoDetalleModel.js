@@ -5,11 +5,10 @@ const PedidoDetalle = sequelize.define('pedido_detalle', {
     pedido_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false,
     },
     inventario_codigo: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      primaryKey: true,
     },
     cantidad: {
       type: DataTypes.INTEGER,

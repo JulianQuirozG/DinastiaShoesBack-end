@@ -11,7 +11,7 @@ const sequelize  = new Sequelize(
       dialect: 'mysql',
       timezone: "-10:00"
     }
-  );
+);
 
 // console.log("Procesando manos",sequelize);
 // Verifica la conexión a la base de datos
