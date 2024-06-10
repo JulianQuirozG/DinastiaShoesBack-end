@@ -82,6 +82,9 @@ async function obtenerUnPedido(req, res) {
       ]
     });
 
+    console.log("CSAAS  "+JSON.stringify(persona.clientes[0].pedidos[0].fecha))
+    persona.clientes[0].pedidos[0].dataValues.fecha = moment(persona.clientes[0].pedidos[0].fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+
     let costoTotal = 0;
     const costo = await carrito.map(async (carr) => {
       const costos = carr.pedido_detalles[0].cantidad * carr.precio;
