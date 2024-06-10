@@ -13,7 +13,7 @@ const Usuario = require('../models/usuarioModel');
 const { async } = require('@firebase/util');
 const moment = require('moment-timezone');
 
-//LISTAR PRODUCTOS
+//LISTAR pedidos
 async function obtenerPedido(req, res) {
   try {
     const carrito = await Pedido.findAll({
@@ -30,7 +30,9 @@ async function obtenerPedido(req, res) {
           id: carr.mediopago_id,
         }
       });
-      console.log(medio)
+     
+      carr.dataValues.fecha = moment(carr.fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+
       return [{ carr }, { medio }]
     });
 
