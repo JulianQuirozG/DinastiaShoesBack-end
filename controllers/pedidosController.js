@@ -143,6 +143,7 @@ async function obtenerPedidosPorUsuario(req, res) {
         })
       );
 
+      pedido.dataValues.fecha = moment(pedido.fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm:ss');
 
       return { pedido, productoss, costoTotal };
     });
