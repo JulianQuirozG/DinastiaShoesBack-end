@@ -42,10 +42,10 @@ async function crearCategoria(req, res) {
                 destacado: "A"
             }
         });
-
+        await cate;
         console.log(cate);
 
-        if (cate && (cate => 5) && (destacado == "A")) {
+        if (cate >= 5 && destacado === "A") {
             console.log("¡La cantidad maxima de categorias destacadas es 5, no puedes destacar mas categorias!")
             return res.status(500).json({ error: '¡La cantidad maxima de categorias destacadas es 5, no puedes destacar mas categorias!' });
         }
@@ -105,10 +105,10 @@ async function actualizarCategoriaPorId(req, res) {
                     destacado: "A"
                 }
             });
+            await cate;
+            console.log(cate > 4 );
 
-            console.log(cate);
-
-            if (cate && (cate => 5) && (destacado == "A")) {
+            if (cate >= 5 && destacado === "A") {
                 console.log("¡La cantidad maxima de categorias destacadas es 5, no puedes destacar mas categorias!")
                 return res.status(500).json({ error: '¡La cantidad maxima de categorias destacadas es 5, no puedes destacar mas categorias!' });
             }
