@@ -14,11 +14,7 @@ const app = express();
       console.error('Error en la conexión a la base de datos:', error);
     }
   })();
-DB_HOST=34.23.200.6
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=HzrN[CZ;h_+(~prH
-DB_DATABASE=DinastiaShoes
+
 console.log("#######################");
 console.log(process.env.DB_HOST);
 console.log(process.env.DB_PORT);
