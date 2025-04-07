@@ -14,7 +14,7 @@ const app = express();
       console.error('Error en la conexión a la base de datos:', error);
     }
   })();
-
+console.log(process.env.puerto);
 const port = process.env.PORT || 3000;
 const inventarioRouter = require('./routes/inventario');
 const productoRouter = require('./routes/productos');
