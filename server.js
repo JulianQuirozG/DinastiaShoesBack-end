@@ -6,12 +6,6 @@ const sequelize = require('./config/database');
 const app = express();
 
 (async () => { 
-    console.log("#######################");
-console.log(process.env.DB_HOST);
-console.log(process.env.DB_PORT);
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASSWORD);
-console.log(process.env.DB_DATABASE);
     try {
       await sequelize.authenticate();
       await sequelize.sync({ alter: true });
@@ -21,7 +15,12 @@ console.log(process.env.DB_DATABASE);
     }
   })();
 
-
+console.log("#######################");
+console.log(process.env.DB_HOST);
+console.log(process.env.DB_PORT);
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);
+console.log(process.env.DB_DATABASE);
 
 const port = process.env.PORT || 3000;
 const inventarioRouter = require('./routes/inventario');
