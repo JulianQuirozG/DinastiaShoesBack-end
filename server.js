@@ -4,7 +4,7 @@ const cors = require('cors');
 const sequelize = require('./config/database');
 
 const app = express();
-console.log("#######################");
+console.log(1);
 console.log(process.env.DB_HOST);
 console.log(process.env.DB_PORT);
 console.log(process.env.DB_USER);
