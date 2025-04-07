@@ -4,12 +4,7 @@ const cors = require('cors');
 const sequelize = require('./config/database');
 
 const app = express();
-console.log(1);
-console.log(process.env.DB_HOST);
-console.log(process.env.DB_PORT);
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASSWORD);
-console.log(process.env.DB_DATABASE);
+
 (async () => { 
     try {
       await sequelize.authenticate();
@@ -19,13 +14,6 @@ console.log(process.env.DB_DATABASE);
       console.error('Error en la conexión a la base de datos:', error);
     }
   })();
-console.log(1);
-console.log("#######################");
-console.log(process.env.DB_HOST);
-console.log(process.env.DB_PORT);
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASSWORD);
-console.log(process.env.DB_DATABASE);
 
 const port = process.env.PORT || 3000;
 const inventarioRouter = require('./routes/inventario');
@@ -58,5 +46,12 @@ app.use('/pedido', pedidoRouter);
 
 app.listen(port, () => {
     console.log(`server on port ${port}`);
+    console.log(1);
+    console.log("#######################");
+    console.log(process.env.DB_HOST);
+    console.log(process.env.DB_PORT);
+    console.log(process.env.DB_USER);
+    console.log(process.env.DB_PASSWORD);
+    console.log(process.env.DB_DATABASE);
 })
 
