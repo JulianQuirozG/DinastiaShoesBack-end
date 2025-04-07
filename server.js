@@ -19,7 +19,7 @@ console.log(process.env.DB_DATABASE);
       console.error('Error en la conexión a la base de datos:', error);
     }
   })();
-
+console.log(1);
 console.log("#######################");
 console.log(process.env.DB_HOST);
 console.log(process.env.DB_PORT);
