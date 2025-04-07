@@ -4,7 +4,12 @@ const cors = require('cors');
 const sequelize = require('./config/database');
 
 const app = express();
-
+console.log("#######################");
+console.log(process.env.DB_HOST);
+console.log(process.env.DB_PORT);
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);
+console.log(process.env.DB_DATABASE);
 (async () => {
     try {
       await sequelize.authenticate();
@@ -15,12 +20,7 @@ const app = express();
     }
   })();
 
-console.log("#######################");
-console.log(process.env.DB_HOST);
-console.log(process.env.DB_PORT);
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASSWORD);
-console.log(process.env.DB_DATABASE);
+
 
 const port = process.env.PORT || 3000;
 const inventarioRouter = require('./routes/inventario');
