@@ -44,7 +44,7 @@ app.use('/medioPago', medioRouter);
 app.use('/carrito', carritoRouter);
 app.use('/pedido', pedidoRouter);
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0",() => {
     console.log(`server on port ${port} ${process.env.DB_HOST} ${process.env.DB_PORT} ${process.env.DB_USER} ${process.env.DB_PASSWORD}  ${process.env.DB_DATABASE}`);
 })
 
