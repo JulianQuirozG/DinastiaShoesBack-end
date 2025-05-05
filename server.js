@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+var path = require('path');
 const sequelize = require('./config/database');
 
 const app = express();
@@ -16,6 +17,9 @@ const app = express();
   })();
 
 const port = process.env.PORT || 3000;
+const basePath = process.env.BASE_PATH || '/app';
+const router = express.Router();
+
 const inventarioRouter = require('./routes/inventario');
 const productoRouter = require('./routes/productos');
 const usuarioRouter = require('./routes/usuarios');
@@ -32,17 +36,19 @@ app.use(cors());
 app.use(morgan('dev'))
 app.use(express.json())
 
+router.use(express.static(path.join(__dirname, 'public')));
+router.use('/productos', productoRouter);
+router.use('/usuario', usuarioRouter);
+router.use('/cliente', clienteRouter);
+router.use('/empleado', empleadoRouter);
+router.use('/categoria', categoriaRouter);
+router.use('/fotos', fotosRouter);
+router.use('/inventario', inventarioRouter);
+router.use('/medioPago', medioRouter);
+router.use('/carrito', carritoRouter);
+router.use('/pedido', pedidoRouter);
 
-app.use('/productos', productoRouter);
-app.use('/usuario', usuarioRouter);
-app.use('/cliente', clienteRouter);
-app.use('/empleado', empleadoRouter);
-app.use('/categoria', categoriaRouter);
-app.use('/fotos', fotosRouter);
-app.use('/inventario', inventarioRouter);
-app.use('/medioPago', medioRouter);
-app.use('/carrito', carritoRouter);
-app.use('/pedido', pedidoRouter);
+app.use(basePath, router);
 
 app.listen(port, "0.0.0.0",() => {
     console.log(`server on port ${port} ${process.env.DB_HOST} ${process.env.DB_PORT} ${process.env.DB_USER} ${process.env.DB_PASSWORD}  ${process.env.DB_DATABASE}`);
