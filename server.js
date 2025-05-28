@@ -17,7 +17,6 @@ const app = express();
   })();
 
 const port = process.env.PORT || 3000;
-const basePath = process.env.BASE_PATH || '/app';
 const router = express.Router();
 
 const inventarioRouter = require('./routes/inventario');
@@ -48,7 +47,7 @@ router.use('/medioPago', medioRouter);
 router.use('/carrito', carritoRouter);
 router.use('/pedido', pedidoRouter);
 
-app.use(basePath, router);
+app.use(router);
 
 app.listen(port, "0.0.0.0",() => {
     console.log(`server on port ${port} ${process.env.DB_HOST} ${process.env.DB_PORT} ${process.env.DB_USER} ${process.env.DB_PASSWORD}  ${process.env.DB_DATABASE}`);
